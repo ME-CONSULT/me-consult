@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navItems } from "@/lib/nav";
 
+function isActivePath(pathname: string, href: string) {
+  const base = href.split("#")[0];
+  if (base === "/") return pathname === "/";
+  return pathname === base || pathname.startsWith(`${base}/`);
+}
+
 export default function Navbar() {
+  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState<string | null>(null);
 
@@ -27,11 +35,17 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden lg:flex lg:items-center lg:gap-1">
-          {navItems.map((item) => (
+          {navItems.map((item) => {
+            const active = isActivePath(pathname, item.href);
+            return (
             <div key={item.label} className="group relative">
               <Link
                 href={item.href}
-                className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-[#222753] transition-colors hover:text-[#222753]/70"
+                className={`flex items-center gap-1 border-b-2 px-3 py-2 text-sm transition-colors ${
+                  active
+                    ? "border-[#ffda00] font-semibold text-[#222753]"
+                    : "border-transparent font-medium text-[#222753] hover:text-[#222753]/70"
+                }`}
               >
                 {item.label}
                 {item.children && (
@@ -60,7 +74,8 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </nav>
 
         <Link
@@ -89,14 +104,19 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="max-h-[calc(100vh-72px)] overflow-y-auto border-t border-[#222753]/10 bg-white lg:hidden">
           <nav className="mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            {navItems.map((item) => (
+            {navItems.map((item) => {
+              const active = isActivePath(pathname, item.href);
+              return (
               <div key={item.label} className="border-b border-[#222753]/5 py-1">
                 <div className="flex items-center justify-between">
                   <Link
                     href={item.href}
-                    className="block flex-1 py-2 text-sm font-medium text-[#222753]"
+                    className={`flex flex-1 items-center gap-2 py-2 text-sm text-[#222753] ${
+                      active ? "font-semibold" : "font-medium"
+                    }`}
                     onClick={() => setMobileOpen(false)}
                   >
+                    {active && <span className="h-1.5 w-1.5 rounded-full bg-[#ffda00]" />}
                     {item.label}
                   </Link>
                   {item.children && (
@@ -136,7 +156,8 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
 
             <Link
               href="/contact#online-consultation"

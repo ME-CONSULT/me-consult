@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
@@ -30,10 +31,15 @@ export default function CookiesPolicyPage() {
                 cookie preferences.
               </p>
               <p className="mt-3">
-                This Cookies Policy should be read alongside our Privacy
-                Policy, which explains how we collect, use, and protect
-                personal data in accordance with applicable laws and
-                regulations.
+                This Cookies Policy should be read alongside our{" "}
+                <Link
+                  href="/privacy-policy"
+                  className="font-semibold text-[#222753] underline decoration-[#ffda00] decoration-2 underline-offset-4"
+                >
+                  Privacy Policy
+                </Link>
+                , which explains how we collect, use, and protect personal
+                data in accordance with applicable laws and regulations.
               </p>
             </div>
 

@@ -68,7 +68,9 @@ export default function Footer() {
             <Link href="/contact#online-consultation" className="hover:text-white">
               Online Consultation T&amp;C
             </Link>
-            <span>Privacy Policy</span>
+            <Link href="/privacy-policy" className="hover:text-white">
+              Privacy Policy
+            </Link>
             <Link href="/cookies-policy" className="hover:text-white">
               Cookies Policy
             </Link>
