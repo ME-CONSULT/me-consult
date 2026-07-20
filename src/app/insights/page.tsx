@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import NewsletterForm from "@/components/NewsletterForm";
 import Reveal from "@/components/Reveal";
 
@@ -64,22 +65,33 @@ export default function InsightsPage() {
       <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-[#222753] p-8 sm:p-12 lg:p-16">
-            <Reveal>
-              <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-[#ffda00]">
-                Insights
-              </span>
-              <h1 className="mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Informed governance is the foundation of corporate resilience
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">
-                Our Insights section provides a repository of legal analysis
-                and strategic perspectives on the intersection of law,
-                commerce, and innovation in Nigeria. Designed for founders,
-                institutional investors, and corporate boards, these
-                resources offer clarity on the evolving regulatory
-                landscape.
-              </p>
-            </Reveal>
+            <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+              <Reveal>
+                <span className="inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wide text-[#ffda00]">
+                  Insights
+                </span>
+                <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                  Informed governance is the foundation of corporate resilience
+                </h1>
+                <p className="mt-4 max-w-lg text-base leading-7 text-white/70">
+                  Our Insights section provides a repository of legal
+                  analysis and strategic perspectives on the intersection
+                  of law, commerce, and innovation in Nigeria. Designed for
+                  founders, institutional investors, and corporate boards,
+                  these resources offer clarity on the evolving regulatory
+                  landscape.
+                </p>
+              </Reveal>
+
+              <Reveal delay={150} className="relative h-64 overflow-hidden rounded-2xl sm:h-80">
+                <Image
+                  src="/insights-hero.jpeg"
+                  alt="ME Consult legal analysis and publications"
+                  fill
+                  className="object-cover"
+                />
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
