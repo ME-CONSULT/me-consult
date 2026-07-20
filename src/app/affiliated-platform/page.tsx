@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import FeatureCards from "@/components/FeatureCards";
 
 export const metadata: Metadata = {
   title: "Affiliated Platform | ME Consult",
@@ -73,28 +72,54 @@ export default function AffiliatedPlatformPage() {
       <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-[#222753]/[0.03] p-8 sm:p-12 lg:p-16">
-            <h2 className="text-3xl font-bold tracking-tight text-[#222753] sm:text-4xl">
+            <h2 className="text-center text-3xl font-bold tracking-tight text-[#222753] sm:text-4xl">
               What ME Academy Offers
             </h2>
 
-            <div className="mt-10">
-              <FeatureCards
-                cards={[
-                  {
-                    title: "Continuing Professional Development",
-                    body: "Specialised training for legal practitioners, including continuing professional development courses.",
-                    icon: "M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.02 12.02 0 0112 21.5a12.02 12.02 0 01-6.16-10.92L12 14zm-9 0v6",
-                  },
-                  {
-                    title: "SME Hub",
-                    body: "Structured resources for startups and growth-stage businesses.",
-                    icon: "M4 21V7l8-4 8 4v14M9 21v-6h6v6M9 11h.01M15 11h.01M9 15h.01M15 15h.01",
-                  },
-                ]}
-              />
+            <div className="mx-auto mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
+              {[
+                {
+                  title: "Continuing Professional Development",
+                  body: "Specialised training for legal practitioners, including continuing professional development courses.",
+                  icon: "M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.02 12.02 0 0112 21.5a12.02 12.02 0 01-6.16-10.92L12 14zm-9 0v6",
+                },
+                {
+                  title: "SME Hub",
+                  body: "Structured resources for startups and growth-stage businesses.",
+                  icon: "M4 21V7l8-4 8 4v14M9 21v-6h6v6M9 11h.01M15 11h.01M9 15h.01M15 15h.01",
+                },
+              ].map((card, i) => (
+                <div
+                  key={card.title}
+                  className={`rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
+                    i === 0
+                      ? "bg-[#222753] text-white"
+                      : "bg-white text-[#222753] shadow-sm ring-1 ring-[#222753]/5"
+                  }`}
+                >
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-full ${
+                      i === 0 ? "bg-white/10" : "bg-[#222753]/5"
+                    }`}
+                  >
+                    <svg
+                      className={`h-5 w-5 ${i === 0 ? "text-[#ffda00]" : "text-[#222753]"}`}
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d={card.icon} />
+                    </svg>
+                  </span>
+                  <p className="mt-5 text-base font-semibold">{card.title}</p>
+                  <p className={`mt-2 text-sm leading-6 ${i === 0 ? "text-white/70" : "text-[#222753]/60"}`}>
+                    {card.body}
+                  </p>
+                </div>
+              ))}
             </div>
 
-            <p className="mt-10 max-w-3xl text-xs leading-5 text-[#222753]/50">
+            <p className="mx-auto mt-10 max-w-3xl text-center text-xs leading-5 text-[#222753]/50">
               Disclaimer: ME Academy is an independent educational platform.
               It does not provide legal advice or legal representation. ME
               Consult is not responsible for any content, services, or
