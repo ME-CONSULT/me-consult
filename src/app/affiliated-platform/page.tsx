@@ -57,7 +57,7 @@ export default function AffiliatedPlatformPage() {
                 href="https://www.me-academy.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-block rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+                className="mt-8 inline-block rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#ffda00] hover:text-[#222753]"
               >
                 Explore the Platform: www.me-academy.org
               </a>

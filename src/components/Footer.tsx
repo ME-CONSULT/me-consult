@@ -69,7 +69,9 @@ export default function Footer() {
               Online Consultation T&amp;C
             </Link>
             <span>Privacy Policy</span>
-            <span>Cookies Policy</span>
+            <Link href="/cookies-policy" className="hover:text-white">
+              Cookies Policy
+            </Link>
           </div>
         </div>
       </div>
