@@ -143,7 +143,7 @@ export default function InsightsPage() {
               href="https://medium.com/@me_consult"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-block text-sm font-semibold text-[#222753] underline decoration-[#ffda00] decoration-2 underline-offset-4"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#ffda00] hover:text-[#222753]"
             >
               Read more on Medium &rarr;
             </a>
