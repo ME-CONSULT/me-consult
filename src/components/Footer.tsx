@@ -89,7 +89,7 @@ export default function Footer() {
         <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/60 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {new Date().getFullYear()} ME Consult&trade;. All Rights Reserved.</p>
           <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/contact#online-consultation" className="hover:text-white">
+            <Link href="/online-consultation-terms" className="hover:text-white">
               Online Consultation T&amp;C
             </Link>
             <Link href="/privacy-policy" className="hover:text-white">
