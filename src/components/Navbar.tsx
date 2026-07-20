@@ -3,26 +3,27 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { navItems, megaMenu } from "@/lib/nav";
-import MegaMenu from "@/components/MegaMenu";
+import { navItems } from "@/lib/nav";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSubOpen, setMobileSubOpen] = useState<string | null>(null);
-  const [moreOpen, setMoreOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-white">
-      <div className="mx-auto flex items-center justify-between px-3 py-6 sm:px-4 lg:px-6">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto flex items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/Blue logo@3x.png"
-            alt="ME Consult"
+            src="/me-consult-icon.png"
+            alt=""
             width={160}
             height={160}
             priority
-            className="h-14 w-auto"
+            className="h-10 w-auto"
           />
+          <span className="text-lg font-bold tracking-tight text-[#222753]">
+            ME CONSULT
+          </span>
         </Link>
 
         <nav className="hidden lg:flex lg:items-center lg:gap-1">
@@ -60,45 +61,7 @@ export default function Navbar() {
               )}
             </div>
           ))}
-
-          {/* More: mega menu */}
-          <div onMouseEnter={() => setMoreOpen(true)} onMouseLeave={() => setMoreOpen(false)}>
-            <button
-              type="button"
-              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-[#222753] transition-colors hover:text-[#222753]/70"
-            >
-              More
-              <svg
-                className={`h-3 w-3 text-[#222753]/60 transition-transform ${moreOpen ? "rotate-180" : ""}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              className={`absolute left-1/2 top-full z-50 w-[1040px] max-w-[92vw] -translate-x-1/2 pt-3 transition-all duration-150 ${
-                moreOpen ? "visible opacity-100" : "invisible opacity-0"
-              }`}
-            >
-              <div className="relative">
-                <div className="absolute -top-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 rounded-[2px] border-l border-t border-[#222753]/10 bg-[#f6f7fb]" />
-                <div className="overflow-hidden rounded-2xl border border-[#222753]/10 bg-[#f6f7fb] shadow-xl">
-                  <MegaMenu />
-                </div>
-              </div>
-            </div>
-          </div>
         </nav>
-
-        {/* Backdrop blur behind the mega menu */}
-        <div
-          className={`fixed inset-x-0 top-[104px] bottom-0 z-40 bg-white/60 backdrop-blur-sm transition-opacity duration-200 ${
-            moreOpen ? "opacity-100" : "pointer-events-none opacity-0"
-          }`}
-        />
 
         <Link
           href="/contact#online-consultation"
@@ -125,7 +88,7 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="max-h-[calc(100vh-72px)] overflow-y-auto border-t border-[#222753]/10 bg-white lg:hidden">
-          <nav className="mx-auto px-3 py-4 sm:px-4 lg:px-6">
+          <nav className="mx-auto px-4 py-4 sm:px-6 lg:px-8">
             {navItems.map((item) => (
               <div key={item.label} className="border-b border-[#222753]/5 py-1">
                 <div className="flex items-center justify-between">
@@ -174,59 +137,6 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-
-            {/* More: mega menu categories, flattened for mobile */}
-            <div className="border-b border-[#222753]/5 py-1">
-              <p className="px-0 py-2 text-sm font-medium text-[#222753]">More</p>
-              {megaMenu.map((category) => (
-                <div key={category.label} className="py-1">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={category.href}
-                      className="block flex-1 py-2 pl-4 text-sm font-semibold text-[#222753]"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {category.label}
-                    </Link>
-                    <button
-                      type="button"
-                      className="p-2 text-[#222753]/60"
-                      onClick={() =>
-                        setMobileSubOpen((cur) =>
-                          cur === category.label ? null : category.label
-                        )
-                      }
-                      aria-label={`Toggle ${category.label} submenu`}
-                    >
-                      <svg
-                        className={`h-4 w-4 transition-transform ${
-                          mobileSubOpen === category.label ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-                  </div>
-                  {mobileSubOpen === category.label && (
-                    <div className="pb-2 pl-8">
-                      {category.items.map((child) => (
-                        <Link
-                          key={child.label}
-                          href={child.href}
-                          className="block py-1.5 text-sm text-[#222753]/70"
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
 
             <Link
               href="/contact#online-consultation"

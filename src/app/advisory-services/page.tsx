@@ -74,6 +74,36 @@ const services = [
     title: "Startup Advisory Services",
     body: "At ME Consult, we are committed to supporting startups and MSMEs in building businesses that are legally sound, compliant with applicable laws and regulations, and structured for sustainable growth. We work with founders and management teams from ideation through to set-up, consolidation, scaling, and growth phases. Our work includes assisting founders in protecting their intellectual property; advising on appropriate business structure and corporate governance strategies; standardising contract documentation; advising on employee remuneration and retention strategies; and preparing organisations for financing rounds.",
   },
+  {
+    number: "10",
+    id: "private-wealth-advisory",
+    title: "Private Wealth Advisory",
+    body: "Preserving and transferring wealth built in Nigeria demands structured governance, deliberate succession design, and a long-term perspective on what endures. Our Private Wealth Advisory practice serves high-net-worth individuals, families, and family-owned businesses seeking structured approaches to managing and transferring wealth. We provide legal and strategic advisory on:",
+    highlights: [
+      {
+        title: "Estate Planning & Wealth Transfer",
+        body: "Advising on structures intended to facilitate intergenerational transfers.",
+      },
+      {
+        title: "Business Succession & Continuity",
+        body: "Advising on succession planning and continuity arrangements.",
+      },
+      {
+        title: "Trust & Family Governance",
+        body: "Advising on governance frameworks for family and trust structures.",
+      },
+      {
+        title: "Real Estate & Property Planning",
+        body: "Advising on legal aspects of Nigerian land and property matters.",
+      },
+      {
+        title: "Sustainability Integration",
+        body: "Advising on incorporating environmental and social considerations into wealth structures.",
+      },
+    ],
+    closing:
+      "Our work is grounded in our understanding of Nigerian law and the practical realities of managing multi-generational wealth in a dynamic market; however, outcomes depend on the specific facts and applicable law.",
+  },
 ];
 
 export default function AdvisoryServicesPage() {
