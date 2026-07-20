@@ -190,7 +190,7 @@ export default function InsightsPage() {
       </section>
 
       {/* Newsletter */}
-      <section id="newsletter" className="scroll-mt-24 bg-white py-10 lg:py-14">
+      <section id="newsletter" className="scroll-mt-24 bg-white pt-16 pb-10 lg:pt-24 lg:pb-14">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="rounded-3xl bg-[#ffda00] p-8 text-center sm:p-12 lg:p-16">
             <p className="text-sm font-semibold uppercase tracking-wide text-[#222753]/60">
