@@ -20,18 +20,15 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white">
       <div className="mx-auto flex items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center">
           <Image
-            src="/me-consult-icon.png"
-            alt=""
+            src="/me-consult-logo.jpg"
+            alt="ME Consult"
             width={160}
             height={160}
             priority
-            className="h-10 w-auto"
+            className="h-12 w-12 rounded-xl"
           />
-          <span className="text-lg font-bold tracking-tight text-[#222753]">
-            ME CONSULT
-          </span>
         </Link>
 
         <nav className="hidden lg:flex lg:items-center lg:gap-1">

@@ -23,17 +23,14 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1.4fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2.5">
+            <Link href="/" className="flex items-center">
               <Image
-                src="/me-consult-icon.png"
-                alt=""
+                src="/me-consult-logo.jpg"
+                alt="ME Consult"
                 width={160}
                 height={160}
-                className="h-10 w-auto"
+                className="h-12 w-12 rounded-xl ring-1 ring-white/15"
               />
-              <span className="text-lg font-bold tracking-tight text-white">
-                ME CONSULT
-              </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">
               Legal advisory for modern business. Specialised corporate and
