@@ -46,29 +46,20 @@ const sectors: { label: string; icon: IconName }[] = [
   { label: "Technology & Startups", icon: "rocket" },
 ];
 
-const tones = [
-  "bg-white text-[#222753]",
-  "bg-white/10 text-white",
-  "bg-[#3a4283] text-white",
-];
-
-// Fixed shuffle (not Math.random) so the pattern looks randomized without
-// causing a server/client hydration mismatch.
-const toneOrder = [2, 0, 1, 2, 1, 0, 2, 1, 0, 2, 1];
-
 export default function SectorsGrid() {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {sectors.map((sector, i) => (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+      {sectors.map((sector) => (
         <div
           key={sector.label}
-          className={`hover-glow flex h-52 flex-col justify-between rounded-2xl p-5 transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl ${tones[toneOrder[i % toneOrder.length]]}`}
+          className="hover-glow group flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-[#222753]/10 bg-white p-4 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
         >
-          <Icon name={sector.icon} />
-          <div>
-            <p className="text-xs opacity-60">{String(i + 1).padStart(2, "0")}.</p>
-            <p className="mt-1 text-sm font-semibold leading-snug">{sector.label}</p>
-          </div>
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#222753]/5 text-[#222753] transition-colors duration-300 group-hover:bg-[#ffda00]/15">
+            <Icon name={sector.icon} />
+          </span>
+          <p className="text-xs font-semibold leading-snug text-[#222753]">
+            {sector.label}
+          </p>
         </div>
       ))}
     </div>

@@ -65,18 +65,6 @@ const services = [
   },
   {
     number: "08",
-    id: "regulatory-and-general-corporate-advisory",
-    title: "Regulatory & Corporate Advisory",
-    body: "ME Consult provides comprehensive regulatory and corporate advisory services to businesses at every stage of growth. Our work includes advising on company formation and corporate structuring, foreign investment and regulatory approvals, sector-specific licensing and compliance, corporate restructurings, and ongoing governance advisory. We maintain working relationships with key regulatory agencies, including the Corporate Affairs Commission (CAC), and the Nigerian Communications Commission (NCC), guiding clients through regulatory processes efficiently.",
-  },
-  {
-    number: "09",
-    id: "startup-advisory-services",
-    title: "Startup Advisory Services",
-    body: "At ME Consult, we are committed to supporting startups and MSMEs in building businesses that are legally sound, compliant with applicable laws and regulations, and structured for sustainable growth. We work with founders and management teams from ideation through to set-up, consolidation, scaling, and growth phases. Our work includes assisting founders in protecting their intellectual property; advising on appropriate business structure and corporate governance strategies; standardising contract documentation; advising on employee remuneration and retention strategies; and preparing organisations for financing rounds.",
-  },
-  {
-    number: "10",
     id: "private-wealth-advisory",
     title: "Private Wealth Advisory",
     body: "Preserving and transferring wealth built in Nigeria demands structured governance, deliberate succession design, and a long-term perspective on what endures. Our Private Wealth Advisory practice serves high-net-worth individuals, families, and family-owned businesses seeking structured approaches to managing and transferring wealth. We provide legal and strategic advisory on:",
@@ -104,6 +92,18 @@ const services = [
     ],
     closing:
       "Our work is grounded in our understanding of Nigerian law and the practical realities of managing multi-generational wealth in a dynamic market; however, outcomes depend on the specific facts and applicable law.",
+  },
+  {
+    number: "09",
+    id: "regulatory-and-general-corporate-advisory",
+    title: "Regulatory & Corporate Advisory",
+    body: "ME Consult provides comprehensive regulatory and corporate advisory services to businesses at every stage of growth. Our work includes advising on company formation and corporate structuring, foreign investment and regulatory approvals, sector-specific licensing and compliance, corporate restructurings, and ongoing governance advisory. We maintain working relationships with key regulatory agencies, including the Corporate Affairs Commission (CAC), and the Nigerian Communications Commission (NCC), guiding clients through regulatory processes efficiently.",
+  },
+  {
+    number: "10",
+    id: "startup-advisory-services",
+    title: "Startup Advisory Services",
+    body: "At ME Consult, we are committed to supporting startups and MSMEs in building businesses that are legally sound, compliant with applicable laws and regulations, and structured for sustainable growth. We work with founders and management teams from ideation through to set-up, consolidation, scaling, and growth phases. Our work includes assisting founders in protecting their intellectual property; advising on appropriate business structure and corporate governance strategies; standardising contract documentation; advising on employee remuneration and retention strategies; and preparing organisations for financing rounds.",
   },
 ];
 
