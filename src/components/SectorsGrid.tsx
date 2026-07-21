@@ -47,21 +47,28 @@ const sectors: { label: string; icon: IconName }[] = [
 ];
 
 export default function SectorsGrid() {
+  const looped = [...sectors, ...sectors];
+
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-      {sectors.map((sector) => (
-        <div
-          key={sector.label}
-          className="hover-glow group flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-[#222753]/10 bg-white p-4 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#222753]/5 text-[#222753] transition-colors duration-300 group-hover:bg-[#ffda00]/15">
-            <Icon name={sector.icon} />
-          </span>
-          <p className="text-xs font-semibold leading-snug text-[#222753]">
-            {sector.label}
-          </p>
-        </div>
-      ))}
+    <div className="relative -mx-8 overflow-hidden sm:-mx-12 lg:-mx-16">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#222753] to-transparent sm:w-24" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#222753] to-transparent sm:w-24" />
+
+      <div className="marquee-track flex w-max gap-4 px-8 sm:px-12 lg:px-16">
+        {looped.map((sector, i) => (
+          <div
+            key={`${sector.label}-${i}`}
+            className="hover-glow group flex aspect-square w-36 shrink-0 flex-col items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/10 p-4 text-center backdrop-blur-md transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ffda00]/40 hover:bg-white/15 sm:w-44"
+          >
+            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-300 group-hover:bg-[#ffda00]/20 group-hover:text-[#ffda00]">
+              <Icon name={sector.icon} />
+            </span>
+            <p className="text-xs font-semibold leading-snug text-white">
+              {sector.label}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

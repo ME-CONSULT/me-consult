@@ -27,3 +27,26 @@ body {
 .hover-glow:hover {
   box-shadow: 0 0 0 3px rgba(255, 218, 0, 0.35), 0 12px 28px -8px rgba(255, 218, 0, 0.45);
 }
+
+@keyframes marquee-loop {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-loop 36s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}

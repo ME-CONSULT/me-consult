@@ -20,7 +20,7 @@ export default function SectorsPage() {
 
       <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-[#222753]/[0.03] p-8 sm:p-12 lg:p-16">
+          <div className="rounded-3xl bg-[#222753] p-8 sm:p-12 lg:p-16">
             <Reveal>
               <SectorsGrid />
             </Reveal>
