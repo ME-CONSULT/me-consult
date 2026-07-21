@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Advisory Services | ME Consult",
@@ -124,7 +125,7 @@ export default function AdvisoryServicesPage() {
                 id={service.id}
                 className="scroll-mt-24 py-12 first:pt-0"
               >
-                <div className="flex flex-col gap-4 sm:flex-row sm:gap-8">
+                <Reveal className="flex flex-col gap-4 sm:flex-row sm:gap-8">
                   <span className="text-3xl font-bold text-[#ffda00]">
                     {service.number}
                   </span>
@@ -141,7 +142,7 @@ export default function AdvisoryServicesPage() {
                         {service.highlights.map((h) => (
                           <li
                             key={h.title}
-                            className="rounded-xl border border-[#222753]/10 p-5"
+                            className="rounded-2xl bg-[#222753]/[0.03] p-5 ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                           >
                             <p className="text-sm font-semibold text-[#222753]">
                               {h.title}
@@ -160,7 +161,7 @@ export default function AdvisoryServicesPage() {
                       </p>
                     )}
                   </div>
-                </div>
+                </Reveal>
               </div>
             ))}
           </div>

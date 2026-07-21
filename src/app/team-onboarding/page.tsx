@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Team Profiles | ME Consult",
@@ -40,7 +41,7 @@ const team = [
   {
     name: "Rukayya Umar Danladi",
     role: "Consultant Associate",
-    photo: null,
+    photo: "/Rukayya.jpg",
     bio: [
       "Rukayya Umar Danladi is a Consultant Associate at ME Consult, where she advises startups and MSMEs on a wide range of corporate and commercial law matters. Her practice focuses on regulatory compliance, corporate governance, contract structuring, and business advisory. She has significant experience drafting and reviewing commercial agreements, including Memoranda of Understanding (MOUs), founders' agreements, HR documentation, internal policies, and strategic partnership frameworks.",
       "Rukayya regularly engages with regulatory authorities such as the Corporate Affairs Commission (CAC) and the Nigerian Communications Commission (NCC), supporting clients on compliance, statutory filings, and advisory matters.",
@@ -59,35 +60,50 @@ export default function TeamOnboardingPage() {
       />
 
       <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="space-y-16">
+        <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="divide-y divide-[#222753]/10">
             {team.map((member) => (
-              <div key={member.name} id={member.name.split(" ")[0].toLowerCase()} className="scroll-mt-24">
-                <div className="flex items-center gap-5">
-                  {member.photo && (
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full">
-                      <Image src={member.photo} alt={member.name} fill className="object-cover" />
-                    </div>
-                  )}
-                  <h2 className="text-xl font-bold text-[#222753]">
-                    {member.name} &ndash; {member.role}
-                  </h2>
-                </div>
-                <div className="mt-4 max-w-3xl space-y-4 text-base leading-7 text-[#222753]/80">
-                  {member.bio.map((p, i) => (
-                    <p key={i}>{p}</p>
-                  ))}
-                </div>
-                {member.memberships && (
-                  <div className="mt-4 max-w-3xl text-base leading-7 text-[#222753]/80">
-                    <p>Professional memberships:</p>
-                    <ul className="mt-2 list-disc space-y-1 pl-5">
-                      {member.memberships.map((m) => (
-                        <li key={m}>{m}</li>
-                      ))}
-                    </ul>
+              <div
+                key={member.name}
+                id={member.name.split(" ")[0].toLowerCase()}
+                className="scroll-mt-24 py-14 first:pt-0"
+              >
+                <Reveal className="grid gap-8 lg:grid-cols-[220px_1fr] lg:gap-14">
+                  <div className="lg:sticky lg:top-28 lg:self-start">
+                    {member.photo && (
+                      <div className="relative aspect-square w-24 overflow-hidden rounded-2xl sm:w-40 lg:w-full">
+                        <Image
+                          src={member.photo}
+                          alt={member.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <h2 className="mt-4 text-lg font-bold text-[#222753]">
+                      {member.name}
+                    </h2>
+                    <p className="mt-1 text-sm text-[#222753]/60">{member.role}</p>
                   </div>
-                )}
+
+                  <div>
+                    <div className="space-y-4 text-base leading-7 text-[#222753]/80">
+                      {member.bio.map((p, i) => (
+                        <p key={i}>{p}</p>
+                      ))}
+                    </div>
+                    {member.memberships && (
+                      <div className="mt-4 text-base leading-7 text-[#222753]/80">
+                        <p>Professional memberships:</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-5">
+                          {member.memberships.map((m) => (
+                            <li key={m}>{m}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </Reveal>
               </div>
             ))}
           </div>

@@ -299,7 +299,7 @@ export default function Home() {
                   initials: "RU",
                   bio: "Rukayya is a Consultant Associate at ME Consult, where she advises startups and MSMEs on a wide range of corporate and commercial law matters.",
                   href: "/team-onboarding#rukayya",
-                  photo: null,
+                  photo: "/Rukayya.jpg",
                 },
               ].map((member) => (
                 <Link

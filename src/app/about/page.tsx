@@ -23,7 +23,7 @@ const team = [
   {
     name: "Rukayya Umar Danladi",
     role: "Consultant Associate",
-    photo: null,
+    photo: "/Rukayya.jpg",
   },
 ];
 

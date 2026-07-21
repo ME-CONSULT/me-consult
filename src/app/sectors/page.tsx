@@ -1,25 +1,13 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import SectorsGrid from "@/components/SectorsGrid";
 
 export const metadata: Metadata = {
   title: "Sectors | ME Consult",
   description:
     "ME Consult has advised clients across a broad range of industries in Nigeria, from agriculture and FMCG to fintech and technology.",
 };
-
-const sectors = [
-  "Agriculture",
-  "Agro-Allied Industry",
-  "Fast-Moving Consumer Goods (FMCG)",
-  "Fintech & Financial Services",
-  "Food and Beverage Technology",
-  "Food Delivery & Logistics",
-  "Logistics & Logistics Technology",
-  "Manufacturing",
-  "Professional Services",
-  "Regulatory Technology",
-  "Technology & Startups",
-];
 
 export default function SectorsPage() {
   return (
@@ -30,20 +18,12 @@ export default function SectorsPage() {
         description="Our team has advised clients operating across a broad range of industries, giving us a well-rounded understanding of the legal and regulatory environments that businesses face."
       />
 
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {sectors.map((sector) => (
-              <div
-                key={sector}
-                className="flex items-center gap-4 rounded-xl border border-[#222753]/10 p-6"
-              >
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#ffda00]" />
-                <span className="text-base font-medium text-[#222753]">
-                  {sector}
-                </span>
-              </div>
-            ))}
+      <section className="bg-white py-10 lg:py-14">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl bg-[#222753] p-8 sm:p-12 lg:p-16">
+            <Reveal>
+              <SectorsGrid />
+            </Reveal>
           </div>
         </div>
       </section>
