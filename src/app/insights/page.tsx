@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import NewsletterForm from "@/components/NewsletterForm";
 import Reveal from "@/components/Reveal";
 
@@ -121,7 +122,7 @@ export default function InsightsPage() {
                     href={pub.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    className="hover-glow group flex items-center justify-between gap-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                   >
                     <div>
                       <h3 className="text-lg font-semibold text-[#222753]">
@@ -143,7 +144,7 @@ export default function InsightsPage() {
               href="https://medium.com/@me_consult"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#ffda00] hover:text-[#222753]"
+              className="hover-glow mt-8 inline-flex items-center gap-2 rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#ffda00] hover:text-[#222753]"
             >
               Read more on Medium &rarr;
             </a>
@@ -174,7 +175,7 @@ export default function InsightsPage() {
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {newsAndEvents.map((item, i) => (
                 <Reveal key={item.title} delay={i * 100}>
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                  <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ffda00]/40 hover:bg-[#ffda00]/10">
                     <h3 className="text-base font-semibold text-white">
                       {item.title}
                     </h3>
@@ -226,7 +227,7 @@ export default function InsightsPage() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {resources.map((resource, i) => (
                 <Reveal key={resource.title} delay={i * 100} className="h-full">
-                  <div className="flex h-full flex-col justify-between rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg">
+                  <div className="hover-glow flex h-full flex-col justify-between rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg">
                     <div>
                       <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#222753]/5 text-[#222753]">
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -252,7 +253,11 @@ export default function InsightsPage() {
               Notice: These resources are provided for informational
               purposes only and do not constitute legal advice. Use of
               these materials does not create a lawyer-client relationship.
-              For specific legal advice, please Contact Us.
+              For specific legal advice, please{" "}
+              <Link href="/contact" className="underline hover:text-[#222753]">
+                Contact Us
+              </Link>
+              .
             </p>
           </div>
         </div>

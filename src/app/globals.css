@@ -19,3 +19,11 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+.hover-glow {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 0 3px rgba(255, 218, 0, 0.35), 0 12px 28px -8px rgba(255, 218, 0, 0.45);
+}

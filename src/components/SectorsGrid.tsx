@@ -62,7 +62,7 @@ export default function SectorsGrid() {
       {sectors.map((sector, i) => (
         <div
           key={sector.label}
-          className={`flex h-52 flex-col justify-between rounded-2xl p-5 transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl ${tones[toneOrder[i % toneOrder.length]]}`}
+          className={`hover-glow flex h-52 flex-col justify-between rounded-2xl p-5 transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-xl ${tones[toneOrder[i % toneOrder.length]]}`}
         >
           <Icon name={sector.icon} />
           <div>

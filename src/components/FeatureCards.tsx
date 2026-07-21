@@ -45,17 +45,13 @@ export default function FeatureCards({ cards }: { cards: Card[] }) {
         <div
           key={card.title}
           style={{ transitionDelay: visible ? `${i * 130}ms` : "0ms" }}
-          className={`group rounded-2xl p-6 transition-all duration-700 ease-out hover:-translate-y-2 hover:shadow-xl ${
+          className={`hover-glow group rounded-2xl bg-[#222753]/[0.03] p-6 text-[#222753] transition-all duration-500 ease-out hover:-translate-y-2 hover:bg-[#222753] hover:text-white hover:shadow-xl ${
             visible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
-          } ${i === 0 ? "bg-[#222753] text-white" : "bg-[#222753]/[0.03] text-[#222753]"}`}
+          }`}
         >
-          <span
-            className={`flex h-10 w-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110 ${
-              i === 0 ? "bg-white/10" : "bg-[#222753]/5"
-            }`}
-          >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#222753]/5 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10">
             <svg
-              className={`h-5 w-5 ${i === 0 ? "text-[#ffda00]" : "text-[#222753]"}`}
+              className="h-5 w-5 text-[#222753] transition-colors duration-500 group-hover:text-[#ffda00]"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -64,7 +60,7 @@ export default function FeatureCards({ cards }: { cards: Card[] }) {
             </svg>
           </span>
           <p className="mt-5 text-base font-semibold">{card.title}</p>
-          <p className={`mt-2 text-sm leading-6 ${i === 0 ? "text-white/70" : "text-[#222753]/60"}`}>
+          <p className="mt-2 text-sm leading-6 text-[#222753]/60 transition-colors duration-500 group-hover:text-white/70">
             {card.body}
           </p>
         </div>

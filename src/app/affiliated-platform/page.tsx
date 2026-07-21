@@ -55,7 +55,7 @@ export default function AffiliatedPlatformPage() {
                   href="https://www.me-academy.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#ffda00] px-6 py-3 text-sm font-semibold text-[#222753] transition-colors hover:bg-white"
+                  className="hover-glow mt-8 inline-flex items-center gap-2 rounded-full bg-[#ffda00] px-6 py-3 text-sm font-semibold text-[#222753] transition-colors hover:bg-white"
                 >
                   Explore the Platform: www.me-academy.org
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,7 +91,7 @@ export default function AffiliatedPlatformPage() {
               ].map((card, i) => (
                 <div
                   key={card.title}
-                  className={`rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
+                  className={`hover-glow rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
                     i === 0
                       ? "bg-[#222753] text-white"
                       : "bg-white text-[#222753] shadow-sm ring-1 ring-[#222753]/5"

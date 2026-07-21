@@ -142,7 +142,7 @@ export default function AdvisoryServicesPage() {
                         {service.highlights.map((h) => (
                           <li
                             key={h.title}
-                            className="rounded-2xl bg-[#222753]/[0.03] p-5 ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                            className="hover-glow rounded-2xl bg-[#222753]/[0.03] p-5 ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
                           >
                             <p className="text-sm font-semibold text-[#222753]">
                               {h.title}

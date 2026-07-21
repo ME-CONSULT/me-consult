@@ -35,7 +35,7 @@ export default function Testimonials() {
             {testimonials.map((t) => (
               <figure
                 key={t.name}
-                className="flex flex-col justify-between rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                className="hover-glow flex flex-col justify-between rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
               >
                 <blockquote className="text-sm leading-6 text-[#222753]/80">
                   &ldquo;{t.quote}&rdquo;

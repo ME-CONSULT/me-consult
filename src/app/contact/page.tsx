@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import ConsultationForm from "@/components/ConsultationForm";
 import Reveal from "@/components/Reveal";
@@ -119,11 +120,17 @@ export default function ContactPage() {
                   <p>
                     To ensure a structured and professional engagement,
                     clients wishing to utilise this service are required to
-                    complete a digital sign-up process and agree to our
-                    Standard Terms and Conditions. This onboarding framework
-                    is designed to provide clarity on the scope of the
-                    services, ensure regulatory compliance, and safeguard the
-                    interests of both the client and the firm.
+                    complete a digital sign-up process and agree to our{" "}
+                    <Link
+                      href="/online-consultation-terms"
+                      className="underline decoration-[#ffda00] underline-offset-2 transition-colors hover:text-[#ffda00]"
+                    >
+                      Standard Terms and Conditions
+                    </Link>
+                    . This onboarding framework is designed to provide
+                    clarity on the scope of the services, ensure regulatory
+                    compliance, and safeguard the interests of both the
+                    client and the firm.
                   </p>
                   <p>
                     By integrating technology with technical expertise, we

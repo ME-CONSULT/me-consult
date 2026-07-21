@@ -20,6 +20,7 @@ export const navItems: NavItem[] = [
       { label: "Private Equity", href: "/advisory-services#private-equity" },
       { label: "Regulatory and General Corporate Advisory", href: "/advisory-services#regulatory-and-general-corporate-advisory" },
       { label: "Startup Advisory Services", href: "/advisory-services#startup-advisory-services" },
+      { label: "Private Wealth Advisory", href: "/advisory-services#private-wealth-advisory" },
     ],
   },
   { label: "Sectors", href: "/sectors" },

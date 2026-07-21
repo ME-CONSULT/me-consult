@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NewsletterForm from "@/components/NewsletterForm";
 
-const companyLinks = [
+const firmLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Careers", href: "/careers" },
@@ -12,9 +12,8 @@ const companyLinks = [
 
 const serviceLinks = [
   { label: "Advisory Services", href: "/advisory-services" },
-  { label: "Sectors", href: "/sectors" },
-  { label: "Contact Us", href: "/contact" },
   { label: "Online Consultation", href: "/contact#online-consultation" },
+  { label: "Sectors", href: "/sectors" },
 ];
 
 export default function Footer() {
@@ -46,10 +45,10 @@ export default function Footer() {
 
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-[#ffda00]">
-              Company
+              The Firm
             </p>
             <ul className="mt-4 space-y-2.5 text-sm text-white/80">
-              {companyLinks.map((link) => (
+              {firmLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="transition-colors hover:text-white">
                     {link.label}
@@ -72,6 +71,12 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+            <Link
+              href="/contact"
+              className="mt-6 inline-block border-t border-white/10 pt-4 text-sm font-semibold text-white transition-colors hover:text-[#ffda00]"
+            >
+              Contact Us
+            </Link>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6">

@@ -63,7 +63,7 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-                <p className="mt-3 text-2xl font-bold text-white">18+ Years</p>
+                <p className="mt-3 text-2xl font-bold text-white">40+ Years</p>
                 <p className="text-sm text-white/70">
                   Combined legal &amp; governance expertise.
                 </p>
@@ -305,7 +305,7 @@ export default function Home() {
                 <Link
                   key={member.first}
                   href={member.href}
-                  className="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[#222753]/5 transition-shadow hover:shadow-lg"
+                  className="hover-glow group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[#222753]/5 transition-shadow hover:shadow-lg"
                 >
                   <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-[#222753]/5">
                     {member.photo ? (
@@ -361,7 +361,7 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/contact#online-consultation"
-                className="rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+                className="hover-glow rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
               >
                 Contact Us
               </Link>

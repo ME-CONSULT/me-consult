@@ -61,13 +61,13 @@ export default function AboutPage() {
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link
                     href="/contact#online-consultation"
-                    className="rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+                    className="hover-glow rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
                   >
                     Book a Consultation
                   </Link>
                   <a
                     href="#meet-the-team"
-                    className="rounded-full border border-[#222753]/20 px-6 py-3 text-sm font-semibold text-[#222753] transition-colors hover:bg-[#222753]/5"
+                    className="hover-glow rounded-full border border-[#222753]/20 px-6 py-3 text-sm font-semibold text-[#222753] transition-colors hover:bg-[#222753]/5"
                   >
                     Meet the Team
                   </a>
@@ -90,7 +90,7 @@ export default function AboutPage() {
                 <p className="mt-1 text-sm text-[#222753]/60">Founded</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-[#222753] sm:text-4xl">18+</p>
+                <p className="text-3xl font-bold text-[#222753] sm:text-4xl">40+</p>
                 <p className="mt-1 text-sm text-[#222753]/60">
                   Years of Combined Experience
                 </p>
@@ -230,7 +230,7 @@ export default function AboutPage() {
               <Link
                 key={member.name}
                 href={`/team-onboarding#${member.name.split(" ")[0].toLowerCase()}`}
-                className="group rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5 transition-shadow hover:shadow-lg"
+                className="hover-glow group rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5 transition-shadow hover:shadow-lg"
               >
                 {member.photo ? (
                   <div className="relative h-16 w-16 overflow-hidden rounded-full">
@@ -278,7 +278,7 @@ export default function AboutPage() {
           </p>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
-            <div className="rounded-2xl border border-[#222753]/10 p-8">
+            <div className="hover-glow rounded-2xl border border-[#222753]/10 p-8">
               <h3 className="text-lg font-semibold text-[#222753]">
                 Graduate Internship Programme
               </h3>
@@ -294,7 +294,7 @@ export default function AboutPage() {
                 through hands-on experience and professional guidance.
               </p>
             </div>
-            <div className="rounded-2xl border border-[#222753]/10 p-8">
+            <div className="hover-glow rounded-2xl border border-[#222753]/10 p-8">
               <h3 className="text-lg font-semibold text-[#222753]">
                 Pro Bono Advisory
               </h3>

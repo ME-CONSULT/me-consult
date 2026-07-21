@@ -75,7 +75,7 @@ export default function CareersPage() {
               <div className="mt-6 grid gap-5 sm:grid-cols-2">
                 {whoWeSeek.map((item, i) => (
                   <Reveal key={item.title} delay={i * 100} className="h-full">
-                    <div className="h-full rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg">
+                    <div className="hover-glow h-full rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg">
                       <h3 className="text-lg font-semibold text-[#222753]">
                         {item.title}
                       </h3>
@@ -107,7 +107,7 @@ export default function CareersPage() {
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {experience.map((item, i) => (
                 <Reveal key={item.title} delay={i * 100}>
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                  <div className="hover-glow h-full rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ffda00]/40 hover:bg-[#ffda00]/10">
                     <h3 className="text-lg font-semibold text-[#ffda00]">
                       {item.title}
                     </h3>
@@ -138,7 +138,7 @@ export default function CareersPage() {
             </p>
             <a
               href="mailto:contactus@me-consult.org"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#222753]"
+              className="hover-glow mt-8 inline-flex items-center gap-2 rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-[#222753]"
             >
               contactus@me-consult.org
             </a>

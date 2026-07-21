@@ -59,7 +59,7 @@ export default function ConsultationForm({ className = "" }: { className?: strin
       </div>
       <button
         type="submit"
-        className="w-full rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+        className="hover-glow w-full rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
       >
         Submit Request
       </button>
