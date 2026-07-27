@@ -54,6 +54,10 @@ const newsAndEvents = [
   {
     title: "Speaking Engagement: Preparing Students for Global Success",
     body: "Our Founder & Lead Consultant, Mary Ekemezie, will be speaking at the Pre-Departure Session of Multi-Plan Pathway College on Tuesday, 28th July 2026 at 12:30pm. In her speech, she will share practical guidance for students preparing to study abroad. The session will cover adapting to a new environment, managing expectations, academic and professional success, and practical strategies for a smooth transition. If you would like to meet, you can catch up with her in Lekki.",
+    link: {
+      text: "Multi-Plan Pathway College",
+      href: "https://share.google/dpgT2ohiqu4oAk4zt",
+    },
   },
 ];
 
@@ -193,7 +197,23 @@ export default function InsightsPage() {
                       {item.title}
                     </h3>
                     <p className="mt-2 text-sm leading-6 text-white/70">
-                      {item.body}
+                      {item.link
+                        ? item.body.split(item.link.text).map((part, idx, arr) => (
+                            <span key={idx}>
+                              {part}
+                              {idx < arr.length - 1 && (
+                                <a
+                                  href={item.link!.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="underline decoration-[#ffda00] underline-offset-2 hover:text-white"
+                                >
+                                  {item.link!.text}
+                                </a>
+                              )}
+                            </span>
+                          ))
+                        : item.body}
                     </p>
                     {item.list && (
                       <ul className="mt-4 space-y-2">
