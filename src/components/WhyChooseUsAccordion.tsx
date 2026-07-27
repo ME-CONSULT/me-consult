@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const items = [
   {
-    title: "Agile Structure",
+    title: "Results-Driven Approach",
     body: "Our streamlined, non-traditional structure allows us to provide practical, solution-oriented legal support. By moving away from the bureaucratic overhead of traditional models, we consistently deliver high-quality legal services and offer a transparent, flexible billing system designed for today's technologically driven businesses.",
   },
   {

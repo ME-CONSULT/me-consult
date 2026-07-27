@@ -28,7 +28,7 @@ const team = [
 ];
 
 const whyChooseUs = [
-  "Agile Structure",
+  "Results-Driven Approach",
   "Culture-Driven",
   "Client-Centric Partnership",
   "Strategic Expertise",
