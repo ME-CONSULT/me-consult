@@ -31,16 +31,29 @@ const publications = [
 
 const newsAndEvents = [
   {
-    title: "Speaking Engagement: Corporate Governance & Startup Growth in Nigeria",
-    body: "Mary Ekemezie (Founder, ME Consult) spoke on corporate governance frameworks for scaling businesses in Nigeria.",
+    title: "The Business Law Series",
+    body: "Join us for another edition of the ME Consult Business Law Series as we unpack what investors really look for before committing capital. Learn why governance, compliance and investment readiness are just as important as a great business idea.",
+    cta: {
+      label: "Register Now",
+      href: "https://zfrmz.com/r97wm79XnC5OFZ4mcsxg",
+    },
   },
   {
-    title: "Webinar: Navigating Employment Law in Remote Work Environments",
-    body: "A ME Consult virtual session exploring legal considerations for distributed teams and modern workplaces.",
+    title: "Missed a Previous Business Law Series?",
+    body: "Catch up on valuable insights from our previous Business Law Series sessions. Download past editions, presentation materials and resources from previous editions of ME Consult's Business Law Series, where leading legal and industry professionals share practical insights on the issues shaping startups, SMEs and growing businesses.",
+    list: [
+      "Tax Housekeeping for Businesses and Not-for-Profit Organisations",
+      "Bring Your Own Device and Remote Work: Key Considerations for Employers and Businesses",
+      "Key Considerations for Building a Small but Effective Corporate Governance Structure",
+    ],
+    cta: {
+      label: "Browse Previous Editions",
+      href: "https://drive.google.com/drive/folders/1ribLhhgK9ujOBYj17AkDHPOaTLeGn249?usp=drive_link",
+    },
   },
   {
-    title: "Legal Clinic: SME Compliance and Regulatory Readiness",
-    body: "An interactive session supporting early-stage businesses with practical compliance guidance.",
+    title: "Speaking Engagement: Preparing Students for Global Success",
+    body: "Our Founder & Lead Consultant, Mary Ekemezie, will be speaking at the Pre-Departure Session of Multi-Plan Pathway College on Tuesday, 28th July 2026 at 12:30pm. In her speech, she will share practical guidance for students preparing to study abroad. The session will cover adapting to a new environment, managing expectations, academic and professional success, and practical strategies for a smooth transition. If you would like to meet, you can catch up with her in Lekki.",
   },
 ];
 
@@ -174,14 +187,34 @@ export default function InsightsPage() {
 
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {newsAndEvents.map((item, i) => (
-                <Reveal key={item.title} delay={i * 100}>
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ffda00]/40 hover:bg-[#ffda00]/10">
+                <Reveal key={item.title} delay={i * 100} className="h-full">
+                  <div className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ffda00]/40 hover:bg-[#ffda00]/10">
                     <h3 className="text-base font-semibold text-white">
                       {item.title}
                     </h3>
                     <p className="mt-2 text-sm leading-6 text-white/70">
                       {item.body}
                     </p>
+                    {item.list && (
+                      <ul className="mt-4 space-y-2">
+                        {item.list.map((entry) => (
+                          <li key={entry} className="flex gap-2 text-sm leading-6 text-white/70">
+                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[#ffda00]" />
+                            <span>{entry}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {item.cta && (
+                      <a
+                        href={item.cta.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover-glow mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-[#ffda00] px-5 py-2.5 text-sm font-semibold text-[#222753] transition-colors hover:bg-white"
+                      >
+                        {item.cta.label} &rarr;
+                      </a>
+                    )}
                   </div>
                 </Reveal>
               ))}
