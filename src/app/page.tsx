@@ -351,7 +351,7 @@ export default function Home() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="rounded-3xl bg-[#ffda00] p-8 text-center sm:p-12 lg:p-16">
             <h2 className="text-3xl font-bold tracking-tight text-[#222753] sm:text-4xl">
-              ME Consult: Legal Advisory for Modern Business
+              ME Consult: Legal Advisory for Modern Businesses
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-[#222753]/80">
               Our team provides the technical legal expertise required to

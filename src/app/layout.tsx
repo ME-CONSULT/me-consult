@@ -11,7 +11,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "ME Consult | Legal Advisory for Modern Business",
+  title: "ME Consult | Legal Advisory for Modern Businesses",
   description:
     "ME Consult provides specialised legal advisory services to local and international corporate entities, MSMEs, and startups navigating the Nigerian regulatory environment.",
 };
