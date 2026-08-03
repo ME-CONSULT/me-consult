@@ -43,9 +43,9 @@ const team = [
     role: "Consultant Associate",
     photo: "/Rukayya.jpg",
     bio: [
-      "Rukayya Umar Danladi is a Consultant Associate at ME Consult, where she advises startups and MSMEs on a wide range of corporate and commercial law matters. Her practice focuses on regulatory compliance, corporate governance, contract structuring, and business advisory. She has significant experience drafting and reviewing commercial agreements, including Memoranda of Understanding (MOUs), founders' agreements, HR documentation, internal policies, and strategic partnership frameworks.",
+      "Rukayya Umar Danladi is a Consultant Associate at ME Consult, where she advises startups and MSMEs on a wide range of corporate and commercial law matters. Her practice focuses on regulatory compliance, corporate governance, contract structuring, and business advisory. She has significant experience drafting and reviewing commercial agreements including founders' agreements, memorandum of understanding (MOUs), and HR documentation and policies.",
       "Rukayya regularly engages with regulatory authorities such as the Corporate Affairs Commission (CAC) and the Nigerian Communications Commission (NCC), supporting clients on compliance, statutory filings, and advisory matters.",
-      "She was called to the Nigerian Bar in 2022 and currently serves as Vice Chair of the Young Lawyers Forum of her branch. Rukayya is a member of the Nigerian Bar Association – Section on Business Law and is a certified Arbitrator.",
+      "She was called to the Nigerian Bar in 2022. She served as Vice Chair of the Young Lawyers Forum of her NBA branch from 2024 to 2026. Rukayya is a member of the Nigerian Bar Association – Section on Business Law (NBA-SBL), and an Associate of the Nigerian Institute of Chartered Arbitrators (NICArb).",
     ],
   },
 ];
