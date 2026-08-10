@@ -32,7 +32,7 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">
-              Legal advisory for modern business. Specialised corporate and
+              Legal advisory for modern businesses. Specialised corporate and
               commercial counsel for entities, MSMEs, and startups navigating
               the Nigerian regulatory environment.
             </p>
