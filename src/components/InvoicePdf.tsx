@@ -1,7 +1,14 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { Invoice } from "@/lib/invoices";
 import type { Booking } from "@/lib/bookings";
-import { formatNaira } from "@/lib/pricing";
+
+// The PDF's base Helvetica font has no glyph for "₦" (it renders as a
+// broken/missing character), so invoices use the plain "NGN" prefix instead
+// of the pricing lib's formatNaira(), which is fine for on-screen HTML/UI.
+function formatNairaForPdf(kobo: number | null | undefined) {
+  if (kobo === null || kobo === undefined) return "—";
+  return `NGN ${(kobo / 100).toLocaleString()}`;
+}
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, color: "#222753", fontFamily: "Helvetica" },
@@ -54,17 +61,17 @@ export function InvoicePdf({ invoice, booking }: { invoice: Invoice; booking: Bo
         <View style={styles.table}>
           <View style={styles.row}>
             <Text style={styles.rowLabel}>{booking.title || booking.service || "Consultation"}</Text>
-            <Text style={styles.rowValue}>{formatNaira(booking.fee_kobo)}</Text>
+            <Text style={styles.rowValue}>{formatNairaForPdf(booking.fee_kobo)}</Text>
           </View>
           {booking.vat_kobo != null && (
             <View style={styles.row}>
               <Text style={styles.rowLabel}>VAT</Text>
-              <Text style={styles.rowValue}>{formatNaira(booking.vat_kobo)}</Text>
+              <Text style={styles.rowValue}>{formatNairaForPdf(booking.vat_kobo)}</Text>
             </View>
           )}
           <View style={styles.totalRow}>
             <Text>Total</Text>
-            <Text>{formatNaira(invoice.amount_kobo)}</Text>
+            <Text>{formatNairaForPdf(invoice.amount_kobo)}</Text>
           </View>
         </View>
 
