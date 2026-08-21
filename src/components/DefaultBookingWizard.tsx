@@ -73,7 +73,12 @@ export default function DefaultBookingWizard({
   function isSelectable(d: Date) {
     const dStr = toDateStr(d);
     if (dStr < minDate) return false;
-    return isBusinessDay(dStr, businessDays);
+    if (!isBusinessDay(dStr, businessDays)) return false;
+    // Also require the consultant to actually have hours that day — global
+    // "bookable days" is a business-wide setting and can include days this
+    // specific consultant doesn't work, which otherwise looks clickable but
+    // always resolves to "not available."
+    return slotsForLawyerDay(availability, lawyer.id, d.getUTCDay(), durationMinutes).length > 0;
   }
 
   function selectDate(d: Date) {
