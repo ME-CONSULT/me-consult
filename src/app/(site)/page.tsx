@@ -81,10 +81,10 @@ export default function Home() {
               <Reveal>
                 <div className="relative h-64 overflow-hidden rounded-2xl sm:h-80">
                   <Image
-                    src="/why-choose-us.jpeg"
+                    src="/biz22.jpg"
                     alt="ME Consult advisory team"
                     fill
-                    className="object-cover"
+                    className="object-cover object-top"
                   />
                 </div>
                 <h2 className="mt-8 text-3xl font-bold leading-tight tracking-tight text-[#222753] sm:text-4xl">
