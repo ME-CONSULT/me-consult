@@ -76,7 +76,7 @@ export default function Navbar() {
         </nav>
 
         <Link
-          href="/contact#online-consultation"
+          href="/book"
           className="hover-glow hidden rounded-full bg-[#222753] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90 lg:inline-block"
         >
           Book a Consultation
@@ -157,7 +157,7 @@ export default function Navbar() {
             })}
 
             <Link
-              href="/contact#online-consultation"
+              href="/book"
               className="hover-glow mt-4 block rounded-full bg-[#222753] px-5 py-2.5 text-center text-sm font-semibold text-white"
               onClick={() => setMobileOpen(false)}
             >

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
-import ConsultationForm from "@/components/ConsultationForm";
 import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
@@ -142,13 +141,19 @@ export default function ContactPage() {
 
               <Reveal delay={150} className="rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5">
                 <h3 className="text-lg font-semibold text-[#222753]">
-                  Request a Consultation
+                  Book a Consultation
                 </h3>
                 <p className="mt-2 text-sm text-[#222753]/60">
-                  Tell us briefly what you need help with and our team will
-                  get back to you.
+                  Choose a lawyer, pick a time, and pay online in a few
+                  minutes &mdash; your consultation is confirmed once payment
+                  is received.
                 </p>
-                <ConsultationForm className="mt-6" />
+                <Link
+                  href="/book"
+                  className="hover-glow mt-6 inline-block w-full rounded-full bg-[#222753] px-6 py-3 text-center text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+                >
+                  Start Booking
+                </Link>
               </Reveal>
             </div>
           </div>

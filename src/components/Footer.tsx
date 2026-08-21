@@ -12,7 +12,7 @@ const firmLinks = [
 
 const serviceLinks = [
   { label: "Advisory Services", href: "/advisory-services" },
-  { label: "Online Consultation", href: "/contact#online-consultation" },
+  { label: "Online Consultation", href: "/book" },
   { label: "Sectors", href: "/sectors" },
 ];
 
