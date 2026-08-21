@@ -8,6 +8,7 @@ import {
   type BookingStatus,
   type PaymentStatus,
 } from "@/lib/bookings";
+import { sendMeetingLinkEmail } from "@/lib/email/client";
 
 const VALID_STATUSES: BookingStatus[] = ["pending", "active", "completed", "cancelled"];
 const VALID_PAYMENT_STATUSES: PaymentStatus[] = ["unpaid", "paid", "refunded"];
@@ -40,6 +41,15 @@ export async function PATCH(
   const body = await request.json();
   const fields: Record<string, unknown> = {};
 
+  const existing = await getBooking(id);
+  if (!existing) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  const meetingUrlNewlySet =
+    typeof body.meeting_url === "string" &&
+    body.meeting_url.trim() &&
+    body.meeting_url.trim() !== existing.meeting_url;
+
   if (body.status !== undefined) {
     if (!VALID_STATUSES.includes(body.status)) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
@@ -62,6 +72,11 @@ export async function PATCH(
 
   try {
     const booking = await updateBooking(id, fields);
+
+    if (meetingUrlNewlySet) {
+      sendMeetingLinkEmail(booking).catch((e) => console.error("sendMeetingLinkEmail failed:", e));
+    }
+
     return NextResponse.json({ booking });
   } catch (err) {
     if (err instanceof SlotUnavailableError) {

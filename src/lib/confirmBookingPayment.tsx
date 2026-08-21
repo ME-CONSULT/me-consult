@@ -1,10 +1,16 @@
+import { renderToBuffer } from "@react-pdf/renderer";
 import { getBookingByReference, updateBooking, type Booking } from "@/lib/bookings";
 import { getLawyer } from "@/lib/lawyers";
 import { verifyTransaction } from "@/lib/paystack";
 import { sendBookingConfirmationEmail, sendNewBookingNotificationEmail } from "@/lib/email/booking";
 import { sendClientWelcomeEmail, sendInvoiceReadyEmail } from "@/lib/email/client";
 import { ensureClientAccountForBooking } from "@/lib/clientAccounts";
-import { createInvoiceForBooking } from "@/lib/invoices";
+import { createInvoiceForBooking, type Invoice } from "@/lib/invoices";
+import { InvoicePdf } from "@/components/InvoicePdf";
+
+async function generateInvoicePdfBuffer(invoice: Invoice, booking: Booking) {
+  return renderToBuffer(<InvoicePdf invoice={invoice} booking={booking} />);
+}
 
 export async function confirmBookingPayment(
   reference: string
@@ -40,6 +46,13 @@ export async function confirmBookingPayment(
         })
       : null;
 
+    const invoicePdfBuffer = invoice
+      ? await generateInvoicePdfBuffer(invoice, booking).catch((e) => {
+          console.error("generateInvoicePdfBuffer failed:", e);
+          return undefined;
+        })
+      : undefined;
+
     await Promise.all([
       sendBookingConfirmationEmail(booking, lawyer).catch((e) =>
         console.error("sendBookingConfirmationEmail failed:", e)
@@ -56,7 +69,7 @@ export async function confirmBookingPayment(
         : []),
       ...(invoice
         ? [
-            sendInvoiceReadyEmail(booking, invoice.invoice_number).catch((e) =>
+            sendInvoiceReadyEmail(booking, invoice.invoice_number, invoicePdfBuffer).catch((e) =>
               console.error("sendInvoiceReadyEmail failed:", e)
             ),
           ]

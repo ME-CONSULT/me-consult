@@ -2,6 +2,7 @@ import type { Booking } from "@/lib/bookings";
 import type { Lawyer } from "@/lib/lawyers";
 import { formatNaira } from "@/lib/pricing";
 import { listStaffUsers } from "@/lib/supabase/admin";
+import { getSettings } from "@/lib/settings";
 import { resend, shell, formatSchedule as formatScheduleAt } from "@/lib/email/core";
 
 function formatSchedule(booking: Booking) {
@@ -23,6 +24,7 @@ function detailRows(booking: Booking, lawyer: Lawyer | null) {
   if (booking.fee_kobo) rows.push(["Consultation fee", formatNaira(booking.fee_kobo)]);
   if (booking.vat_kobo) rows.push(["VAT", formatNaira(booking.vat_kobo)]);
   if (booking.amount_kobo) rows.push(["Total", formatNaira(booking.amount_kobo)]);
+  if (booking.meeting_url) rows.push(["Meeting link", booking.meeting_url]);
   return rows;
 }
 
@@ -47,8 +49,12 @@ export async function sendBookingConfirmationEmail(booking: Booking, lawyer: Law
 }
 
 export async function sendNewBookingNotificationEmail(booking: Booking, lawyer: Lawyer | null) {
-  const staff = await listStaffUsers();
-  const recipients = staff.map((u) => u.email).filter((e): e is string => Boolean(e));
+  const [staff, settings] = await Promise.all([listStaffUsers(), getSettings()]);
+  const staffEmails = staff.map((u) => u.email).filter((e): e is string => Boolean(e));
+  // Always include the official business inbox alongside every staff member's
+  // own email, so bookings are never missed even if an individual account's
+  // notifications get buried.
+  const recipients = Array.from(new Set([...staffEmails, settings.business_email].filter(Boolean)));
   if (recipients.length === 0) return;
 
   const paid = booking.payment_status === "paid";
