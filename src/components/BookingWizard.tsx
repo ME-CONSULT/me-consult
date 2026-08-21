@@ -17,6 +17,11 @@ import {
 } from "@/lib/pricing";
 import { combineLagosDateTime, isBusinessDay, meetsNotice, weekdayOf } from "@/lib/availability";
 import { ADVISORY_SERVICES } from "@/lib/advisoryServices";
+import {
+  GENERIC_INTAKE_QUESTIONS,
+  SERVICE_INTAKE_QUESTIONS,
+  type IntakeQuestion,
+} from "@/lib/intakeQuestions";
 
 const CURRENCIES: Currency[] = ["NGN", "USD", "GBP"];
 type Step = "lawyer" | "duration" | "schedule" | "details" | "review" | "done";
@@ -71,6 +76,7 @@ export default function BookingWizard({
   const [clientPhone, setClientPhone] = useState("");
   const [service, setService] = useState("");
   const [notes, setNotes] = useState("");
+  const [intakeAnswers, setIntakeAnswers] = useState<Record<string, string>>({});
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,6 +94,10 @@ export default function BookingWizard({
       : [];
 
   const dateIsValid = date ? isBusinessDay(date, businessDays) : true;
+
+  function setAnswer(id: string, value: string) {
+    setIntakeAnswers((prev) => ({ ...prev, [id]: value }));
+  }
 
   function goTo(next: Step) {
     setError(null);
@@ -118,6 +128,7 @@ export default function BookingWizard({
         client_phone: clientPhone,
         service: service || null,
         notes,
+        intake_answers: intakeAnswers,
         lawyer_id: lawyer.id,
         duration_minutes: duration,
         date,
@@ -352,7 +363,16 @@ export default function BookingWizard({
             </label>
             <select
               value={service}
-              onChange={(e) => setService(e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value;
+                const prevQuestions = SERVICE_INTAKE_QUESTIONS[service] ?? [];
+                setIntakeAnswers((cur) => {
+                  const copy = { ...cur };
+                  for (const q of prevQuestions) delete copy[q.id];
+                  return copy;
+                });
+                setService(next);
+              }}
               className="mt-1.5 w-full rounded-lg border border-[#222753]/20 px-4 py-2.5 text-sm text-[#222753] outline-none focus:border-[#222753]"
             >
               <option value="">Select a topic</option>
@@ -363,6 +383,26 @@ export default function BookingWizard({
               ))}
             </select>
           </div>
+
+          {GENERIC_INTAKE_QUESTIONS.map((q) => (
+            <IntakeField
+              key={q.id}
+              question={q}
+              value={intakeAnswers[q.id] ?? ""}
+              onChange={(v) => setAnswer(q.id, v)}
+            />
+          ))}
+
+          {service &&
+            SERVICE_INTAKE_QUESTIONS[service]?.map((q) => (
+              <IntakeField
+                key={q.id}
+                question={q}
+                value={intakeAnswers[q.id] ?? ""}
+                onChange={(v) => setAnswer(q.id, v)}
+              />
+            ))}
+
           <div>
             <label className="block text-sm font-medium text-[#222753]">Notes (optional)</label>
             <textarea
@@ -434,6 +474,39 @@ export default function BookingWizard({
             {submitting ? "Submitting..." : "Proceed to payment"}
           </button>
         </div>
+      )}
+    </div>
+  );
+}
+
+function IntakeField({
+  question,
+  value,
+  onChange,
+}: {
+  question: IntakeQuestion;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const inputClass =
+    "mt-1.5 w-full rounded-lg border border-[#222753]/20 px-4 py-2.5 text-sm text-[#222753] outline-none focus:border-[#222753]";
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-[#222753]">{question.label}</label>
+      {question.type === "select" ? (
+        <select value={value} onChange={(e) => onChange(e.target.value)} className={inputClass}>
+          <option value="">Select an option</option>
+          {question.options?.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+      ) : question.type === "textarea" ? (
+        <textarea rows={3} value={value} onChange={(e) => onChange(e.target.value)} className={inputClass} />
+      ) : (
+        <input value={value} onChange={(e) => onChange(e.target.value)} className={inputClass} />
       )}
     </div>
   );

@@ -7,6 +7,9 @@ export type Settings = {
   booking_notice_hours: number;
   vat_rate: number;
   business_days: number[];
+  default_lawyer_id: string | null;
+  default_duration_minutes: number | null;
+  default_fee_kobo: number | null;
   updated_at: string;
 };
 
@@ -18,7 +21,17 @@ export async function getSettings() {
 }
 
 export type SettingsUpdateInput = Partial<
-  Pick<Settings, "business_email" | "business_phone" | "booking_notice_hours" | "vat_rate" | "business_days">
+  Pick<
+    Settings,
+    | "business_email"
+    | "business_phone"
+    | "booking_notice_hours"
+    | "vat_rate"
+    | "business_days"
+    | "default_lawyer_id"
+    | "default_duration_minutes"
+    | "default_fee_kobo"
+  >
 >;
 
 export async function updateSettings(fields: SettingsUpdateInput) {

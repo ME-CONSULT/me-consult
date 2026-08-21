@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole } from "@/lib/roles";
 import {
   listRates,
   upsertRate,
@@ -16,6 +17,9 @@ export async function GET() {
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  if (getUserRole(sessionUser) !== "admin") {
+    return NextResponse.json({ error: "Admin access required" }, { status: 403 });
+  }
 
   const rates = await listRates();
   return NextResponse.json({ rates });
@@ -25,6 +29,9 @@ export async function PATCH(request: Request) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (getUserRole(sessionUser) !== "admin") {
+    return NextResponse.json({ error: "Admin access required" }, { status: 403 });
   }
 
   const body = await request.json();
@@ -64,6 +71,9 @@ export async function DELETE(request: Request) {
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (getUserRole(sessionUser) !== "admin") {
+    return NextResponse.json({ error: "Admin access required" }, { status: 403 });
   }
 
   const { searchParams } = new URL(request.url);

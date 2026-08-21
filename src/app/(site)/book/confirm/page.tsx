@@ -68,6 +68,16 @@ export default async function BookConfirmPage({
         )}
         <Row label="Total paid" value={formatNaira(booking.amount_kobo)} />
       </div>
+      {booking.meeting_url && (
+        <a
+          href={booking.meeting_url}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 rounded-full bg-[#ffda00] px-6 py-3 text-sm font-semibold text-[#222753] hover:brightness-95"
+        >
+          Join video call
+        </a>
+      )}
     </Result>
   );
 }

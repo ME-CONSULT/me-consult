@@ -79,7 +79,7 @@ export default function Home() {
           <div className="rounded-3xl bg-[#222753]/[0.03] p-8 sm:p-12 lg:p-16">
             <div className="grid gap-12 lg:grid-cols-2">
               <Reveal>
-                <div className="relative h-64 overflow-hidden rounded-2xl sm:h-80">
+                <div className="relative h-64 overflow-hidden rounded-2xl border border-[#222753]/10 sm:h-80">
                   <Image
                     src="/biz22.jpg"
                     alt="ME Consult advisory team"

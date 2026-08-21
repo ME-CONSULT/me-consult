@@ -1,5 +1,5 @@
 import { CalendarClock, CalendarCheck, Users, ShieldCheck, Image as ImageIcon } from "lucide-react";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { listStaffUsers } from "@/lib/supabase/admin";
 import { listImages } from "@/lib/r2";
 import { listBookings, listBookingsBetween } from "@/lib/bookings";
 import { listClients } from "@/lib/clients";
@@ -8,9 +8,8 @@ import { mondayOf, todayLagosDateStr, weekRangeUTC } from "@/lib/calendarWeek";
 import DashboardWeekCalendar from "@/components/admin/DashboardWeekCalendar";
 
 async function getStats() {
-  const admin = supabaseAdmin();
-  const [{ data: usersData }, images, pending, active, clients] = await Promise.all([
-    admin.auth.admin.listUsers({ perPage: 200 }),
+  const [staff, images, pending, active, clients] = await Promise.all([
+    listStaffUsers(),
     listImages(),
     listBookings("pending"),
     listBookings("active"),
@@ -18,7 +17,7 @@ async function getStats() {
   ]);
 
   return {
-    admins: usersData?.users.length ?? 0,
+    admins: staff.length,
     images: images.length,
     pending: pending.length,
     active: active.length,
@@ -46,7 +45,7 @@ export default async function AdminDashboardPage({
     { label: "Pending bookings", value: stats.pending, icon: CalendarClock, href: "/admin/bookings/pending" },
     { label: "Active bookings", value: stats.active, icon: CalendarCheck, href: "/admin/bookings/active" },
     { label: "Clients", value: stats.clients, icon: Users, href: "/admin/clients" },
-    { label: "Admins", value: stats.admins, icon: ShieldCheck, href: "/admin/users" },
+    { label: "Team", value: stats.admins, icon: ShieldCheck, href: "/admin/users" },
     { label: "Images", value: stats.images, icon: ImageIcon, href: "/admin/images" },
   ];
 

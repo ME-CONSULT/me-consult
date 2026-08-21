@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
 import { listBookings, createBooking, SlotUnavailableError, type BookingStatus } from "@/lib/bookings";
+import { upsertClientForBooking } from "@/lib/clients";
 
 const VALID_STATUSES: BookingStatus[] = ["pending", "active", "completed", "cancelled"];
 
@@ -39,13 +40,20 @@ export async function POST(request: Request) {
 
   const amountNaira = Number(body.amount_naira);
 
+  const trimmedName = client_name.trim();
+  const normalizedEmail = client_email.trim().toLowerCase();
+  const trimmedPhone = body.client_phone?.trim() || null;
+  const client = await upsertClientForBooking(normalizedEmail, trimmedName, trimmedPhone);
+
   try {
     const booking = await createBooking({
-      client_name: client_name.trim(),
-      client_email: client_email.trim().toLowerCase(),
-      client_phone: body.client_phone?.trim() || null,
+      client_name: trimmedName,
+      client_email: normalizedEmail,
+      client_phone: trimmedPhone,
+      client_id: client.id,
       service: body.service || null,
       notes: body.notes?.trim() || null,
+      title: typeof body.title === "string" ? body.title.trim() || null : null,
       scheduled_at: body.scheduled_at || null,
       lawyer_id: body.lawyer_id || null,
       duration_minutes: Number.isFinite(body.duration_minutes) ? body.duration_minutes : null,

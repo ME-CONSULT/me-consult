@@ -55,6 +55,8 @@ export async function PATCH(
   }
 
   if (body.notes !== undefined) fields.notes = body.notes;
+  if (body.title !== undefined) fields.title = body.title;
+  if (body.meeting_url !== undefined) fields.meeting_url = body.meeting_url;
   if (body.lawyer_id !== undefined) fields.lawyer_id = body.lawyer_id;
   if (body.scheduled_at !== undefined) fields.scheduled_at = body.scheduled_at;
 

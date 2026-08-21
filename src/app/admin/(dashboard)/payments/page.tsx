@@ -1,5 +1,8 @@
+import { redirect } from "next/navigation";
 import { CreditCard } from "lucide-react";
 import { listPayments } from "@/lib/bookings";
+import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole } from "@/lib/roles";
 import EmptyState from "@/components/admin/EmptyState";
 
 function formatNaira(kobo: number | null) {
@@ -14,6 +17,11 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default async function AdminPaymentsPage() {
+  const sessionUser = await getSessionUser();
+  if (getUserRole(sessionUser) !== "admin") {
+    redirect("/admin");
+  }
+
   const payments = await listPayments();
 
   if (payments.length === 0) {
@@ -50,8 +58,8 @@ export default async function AdminPaymentsPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-[#222753]/10 bg-white">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-xl border border-[#222753]/10 bg-white">
+        <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="border-b border-[#222753]/10 text-left text-xs uppercase tracking-wide text-[#222753]/40">
               <th className="px-6 py-3 font-medium">Client</th>

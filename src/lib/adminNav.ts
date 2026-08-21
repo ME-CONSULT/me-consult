@@ -13,6 +13,8 @@ export type AdminNavItem = {
   href: string;
   icon: LucideIcon;
   children?: { label: string; href: string }[];
+  /** Hide this item for anyone below this role (only "admin" is used today). */
+  minRole?: "admin";
 };
 
 export const adminNavItems: AdminNavItem[] = [
@@ -25,10 +27,11 @@ export const adminNavItems: AdminNavItem[] = [
       { label: "Pending", href: "/admin/bookings/pending" },
       { label: "Active", href: "/admin/bookings/active" },
       { label: "Create booking", href: "/admin/bookings/new" },
+      { label: "Booking links", href: "/admin/bookings/links" },
       { label: "Settings", href: "/admin/bookings/settings" },
     ],
   },
-  { label: "Payments", href: "/admin/payments", icon: CreditCard },
+  { label: "Payments", href: "/admin/payments", icon: CreditCard, minRole: "admin" },
   { label: "Clients", href: "/admin/clients", icon: Users },
   { label: "Users", href: "/admin/users", icon: ShieldCheck },
   { label: "Images", href: "/admin/images", icon: ImageIcon },

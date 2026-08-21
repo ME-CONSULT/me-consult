@@ -26,14 +26,27 @@ export default async function AdminClientDetailPage({
         Back to clients
       </Link>
 
-      <div className="rounded-xl border border-[#222753]/10 bg-white p-6">
-        <h1 className="text-lg font-semibold text-[#222753]">{summary.name}</h1>
+      <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
+        <div className="flex items-center gap-2">
+          <h1 className="text-lg font-semibold text-[#222753]">{summary.name ?? summary.email}</h1>
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+              summary.status === "active"
+                ? "bg-green-100 text-green-700"
+                : summary.status === "login_sent"
+                  ? "bg-amber-100 text-amber-700"
+                  : "bg-[#222753]/5 text-[#222753]/50"
+            }`}
+          >
+            {summary.status === "active" ? "Active" : summary.status === "login_sent" ? "Login sent" : "Not sent"}
+          </span>
+        </div>
         <p className="text-sm text-[#222753]/50">
           {summary.email}
           {summary.phone && ` · ${summary.phone}`}
         </p>
 
-        <div className="mt-4 grid grid-cols-3 gap-4 border-t border-[#222753]/5 pt-4">
+        <div className="mt-4 grid grid-cols-1 gap-4 border-t border-[#222753]/5 pt-4 sm:grid-cols-3">
           <div>
             <p className="text-xs text-[#222753]/40">Bookings</p>
             <p className="text-lg font-semibold text-[#222753]">{summary.bookingsCount}</p>

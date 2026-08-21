@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { supabaseServerAuth } from "@/lib/supabase/server";
 import { adminDisplayName } from "@/lib/adminDisplayName";
-import AdminSidebar from "@/components/admin/AdminSidebar";
-import AdminHeader from "@/components/admin/AdminHeader";
+import { getUserRole } from "@/lib/roles";
+import AdminShell from "@/components/admin/AdminShell";
 
 export default async function AdminDashboardLayout({
   children,
@@ -19,12 +19,8 @@ export default async function AdminDashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f6fa]">
-      <AdminSidebar />
-      <div className="lg:pl-60">
-        <AdminHeader email={user.email ?? ""} displayName={adminDisplayName(user)} />
-        <main className="p-6">{children}</main>
-      </div>
-    </div>
+    <AdminShell email={user.email ?? ""} displayName={adminDisplayName(user)} role={getUserRole(user)}>
+      {children}
+    </AdminShell>
   );
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole } from "@/lib/roles";
 import { getSettings, updateSettings } from "@/lib/settings";
 
 export async function GET() {
@@ -28,11 +29,29 @@ export async function PATCH(request: Request) {
   if (Number.isFinite(body.booking_notice_hours)) {
     fields.booking_notice_hours = body.booking_notice_hours;
   }
-  if (Number.isFinite(body.vat_rate)) fields.vat_rate = body.vat_rate;
+  // VAT rate is payment-related and admin-only; silently ignored (not
+  // rejected) for staff so the rest of a combined business-settings save
+  // still goes through even though the form always includes this field.
+  if (Number.isFinite(body.vat_rate) && getUserRole(sessionUser) === "admin") {
+    fields.vat_rate = body.vat_rate;
+  }
   if (Array.isArray(body.business_days)) {
     fields.business_days = body.business_days.filter(
       (d: unknown) => Number.isInteger(d) && (d as number) >= 0 && (d as number) <= 6
     );
+  }
+
+  // Default-booking-page pricing is admin-only, same posture as VAT rate.
+  if (getUserRole(sessionUser) === "admin") {
+    if (typeof body.default_lawyer_id === "string" || body.default_lawyer_id === null) {
+      fields.default_lawyer_id = body.default_lawyer_id;
+    }
+    if (Number.isFinite(body.default_duration_minutes) || body.default_duration_minutes === null) {
+      fields.default_duration_minutes = body.default_duration_minutes;
+    }
+    if (Number.isFinite(body.default_fee_kobo) || body.default_fee_kobo === null) {
+      fields.default_fee_kobo = body.default_fee_kobo;
+    }
   }
 
   const settings = await updateSettings(fields);

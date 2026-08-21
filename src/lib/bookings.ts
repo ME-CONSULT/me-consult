@@ -10,6 +10,10 @@ export type Booking = {
   client_phone: string | null;
   service: string | null;
   notes: string | null;
+  intake_answers: Record<string, string>;
+  title: string | null;
+  meeting_url: string | null;
+  client_id: string | null;
   status: BookingStatus;
   scheduled_at: string | null;
   lawyer_id: string | null;
@@ -31,6 +35,10 @@ export type NewBookingInput = {
   client_phone?: string | null;
   service?: string | null;
   notes?: string | null;
+  intake_answers?: Record<string, string> | null;
+  title?: string | null;
+  meeting_url?: string | null;
+  client_id?: string | null;
   scheduled_at?: string | null;
   lawyer_id?: string | null;
   duration_minutes?: number | null;
@@ -43,6 +51,8 @@ export type NewBookingInput = {
 
 export type BookingUpdateInput = Partial<{
   notes: string | null;
+  title: string | null;
+  meeting_url: string | null;
   lawyer_id: string | null;
   scheduled_at: string | null;
   status: BookingStatus;
@@ -67,6 +77,18 @@ export async function listBookings(status?: BookingStatus) {
   return data as Booking[];
 }
 
+export async function listBookingsByClientId(clientId: string) {
+  const supabase = supabaseAdmin();
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("scheduled_at", { ascending: false });
+
+  if (error) throw error;
+  return data as Booking[];
+}
+
 export async function getBooking(id: string) {
   const supabase = supabaseAdmin();
   const { data, error } = await supabase.from("bookings").select("*").eq("id", id).single();
@@ -84,6 +106,10 @@ export async function createBooking(input: NewBookingInput) {
       client_phone: input.client_phone ?? null,
       service: input.service ?? null,
       notes: input.notes ?? null,
+      intake_answers: input.intake_answers ?? {},
+      title: input.title ?? null,
+      meeting_url: input.meeting_url ?? null,
+      client_id: input.client_id ?? null,
       scheduled_at: input.scheduled_at ?? null,
       lawyer_id: input.lawyer_id ?? null,
       duration_minutes: input.duration_minutes ?? null,
@@ -156,7 +182,9 @@ export async function searchBookings(q: string, limit = 8) {
   const { data, error } = await supabase
     .from("bookings")
     .select("*")
-    .or(`client_name.ilike.${pattern},client_email.ilike.${pattern},service.ilike.${pattern}`)
+    .or(
+      `client_name.ilike.${pattern},client_email.ilike.${pattern},service.ilike.${pattern},notes.ilike.${pattern},title.ilike.${pattern}`
+    )
     .order("created_at", { ascending: false })
     .limit(limit);
 

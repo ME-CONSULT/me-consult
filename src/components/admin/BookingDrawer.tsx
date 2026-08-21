@@ -118,7 +118,7 @@ function BookingDrawerContent({
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-[#222753]/10 px-6 py-4">
+      <div className="flex items-center justify-between border-b border-[#222753]/10 px-4 py-4 sm:px-6">
         <h2 className="text-sm font-semibold text-[#222753]">Booking details</h2>
         <button
           onClick={onClose}
@@ -129,7 +129,7 @@ function BookingDrawerContent({
         </button>
       </div>
 
-      <div className="flex-1 space-y-5 p-6">
+      <div className="flex-1 space-y-5 p-4 sm:p-6">
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <div>

@@ -45,7 +45,7 @@ export default function ProfileForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md space-y-4 rounded-xl border border-[#222753]/10 bg-white p-6"
+      className="max-w-md space-y-4 rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6"
     >
       <div>
         <label className="block text-sm font-medium text-[#222753]">Display name</label>

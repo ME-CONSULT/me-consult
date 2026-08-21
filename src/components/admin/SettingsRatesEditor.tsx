@@ -288,7 +288,7 @@ export default function SettingsRatesEditor({
             panelOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex items-center justify-between border-b border-[#222753]/10 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-[#222753]/10 px-4 py-4 sm:px-6">
             <h2 className="text-sm font-semibold text-[#222753]">
               {editingRateId ? "Edit rate" : "Add rate"}
             </h2>
@@ -301,7 +301,7 @@ export default function SettingsRatesEditor({
             </button>
           </div>
 
-          <form onSubmit={handleSave} className="flex flex-1 flex-col gap-4 overflow-y-auto p-6">
+          <form onSubmit={handleSave} className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-6">
             <div>
               <label className={labelClass}>Lawyer</label>
               <select

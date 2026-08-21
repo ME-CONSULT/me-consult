@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Booking, BookingStatus, PaymentStatus } from "@/lib/bookings";
 import { TIER_LABELS, type Lawyer } from "@/lib/lawyers";
 import { formatNaira } from "@/lib/pricing";
+import { GENERIC_INTAKE_QUESTIONS, SERVICE_INTAKE_QUESTIONS } from "@/lib/intakeQuestions";
 
 const STATUS_TRANSITIONS: Record<BookingStatus, { to: BookingStatus; label: string }[]> = {
   pending: [
@@ -39,13 +40,17 @@ function toLocalInputValue(iso: string | null) {
 export default function BookingDetailClient({
   initialBooking,
   lawyers,
+  multiLawyerIds = [],
 }: {
   initialBooking: Booking;
   lawyers: Lawyer[];
+  multiLawyerIds?: string[];
 }) {
   const router = useRouter();
   const [booking, setBooking] = useState(initialBooking);
   const [notes, setNotes] = useState(booking.notes ?? "");
+  const [title, setTitle] = useState(booking.title ?? "");
+  const [meetingUrl, setMeetingUrl] = useState(booking.meeting_url ?? "");
   const [scheduledAt, setScheduledAt] = useState(toLocalInputValue(booking.scheduled_at));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -110,10 +115,15 @@ export default function BookingDetailClient({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <div className="rounded-xl border border-[#222753]/10 bg-white p-6">
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-lg font-semibold text-[#222753]">{booking.client_name}</h1>
+                <h1 className="text-lg font-semibold text-[#222753]">
+                  {booking.title || booking.client_name}
+                </h1>
+                {booking.title && (
+                  <p className="text-sm text-[#222753]/50">{booking.client_name}</p>
+                )}
                 <p className="text-sm text-[#222753]/50">{booking.client_email}</p>
                 {booking.client_phone && (
                   <p className="text-sm text-[#222753]/50">{booking.client_phone}</p>
@@ -131,24 +141,34 @@ export default function BookingDetailClient({
               </p>
             )}
 
-            <div className="mt-4 grid grid-cols-2 gap-4">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-medium uppercase tracking-wide text-[#222753]/40">
-                  Lawyer
+                  {multiLawyerIds.length > 0 ? "Lawyers" : "Lawyer"}
                 </label>
-                <select
-                  value={booking.lawyer_id ?? ""}
-                  onChange={(e) => patch({ lawyer_id: e.target.value || null })}
-                  disabled={saving}
-                  className="mt-1 w-full rounded-lg border border-[#222753]/15 px-3 py-2 text-sm text-[#222753] outline-none focus:border-[#222753]/40"
-                >
-                  <option value="">Unassigned</option>
-                  {lawyers.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {l.first_name} {l.last_name} ({TIER_LABELS[l.tier]})
-                    </option>
-                  ))}
-                </select>
+                {multiLawyerIds.length > 0 ? (
+                  <p className="mt-1 rounded-lg bg-[#222753]/5 px-3 py-2 text-sm text-[#222753]/70">
+                    {multiLawyerIds
+                      .map((id) => lawyers.find((l) => l.id === id))
+                      .filter((l): l is Lawyer => Boolean(l))
+                      .map((l) => `${l.first_name} ${l.last_name}`)
+                      .join(", ")}
+                  </p>
+                ) : (
+                  <select
+                    value={booking.lawyer_id ?? ""}
+                    onChange={(e) => patch({ lawyer_id: e.target.value || null })}
+                    disabled={saving}
+                    className="mt-1 w-full rounded-lg border border-[#222753]/15 px-3 py-2 text-sm text-[#222753] outline-none focus:border-[#222753]/40"
+                  >
+                    <option value="">Unassigned</option>
+                    {lawyers.map((l) => (
+                      <option key={l.id} value={l.id}>
+                        {l.first_name} {l.last_name} ({TIER_LABELS[l.tier]})
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-medium uppercase tracking-wide text-[#222753]/40">
@@ -189,7 +209,41 @@ export default function BookingDetailClient({
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#222753]/10 bg-white p-6">
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
+            <label className="block text-sm font-medium text-[#222753]">Appointment title</label>
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Custom title (optional)"
+              className="mt-1.5 w-full rounded-lg border border-[#222753]/15 px-3 py-2 text-sm text-[#222753] outline-none focus:border-[#222753]/40"
+            />
+            <button
+              onClick={() => patch({ title: title.trim() || null })}
+              disabled={saving}
+              className="mt-3 rounded-lg border border-[#222753]/15 px-3 py-1.5 text-sm text-[#222753]/70 hover:bg-[#222753]/5 disabled:opacity-50"
+            >
+              Save title
+            </button>
+          </div>
+
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
+            <label className="block text-sm font-medium text-[#222753]">Meeting link</label>
+            <input
+              value={meetingUrl}
+              onChange={(e) => setMeetingUrl(e.target.value)}
+              placeholder="https://..."
+              className="mt-1.5 w-full rounded-lg border border-[#222753]/15 px-3 py-2 text-sm text-[#222753] outline-none focus:border-[#222753]/40"
+            />
+            <button
+              onClick={() => patch({ meeting_url: meetingUrl.trim() || null })}
+              disabled={saving}
+              className="mt-3 rounded-lg border border-[#222753]/15 px-3 py-1.5 text-sm text-[#222753]/70 hover:bg-[#222753]/5 disabled:opacity-50"
+            >
+              Save meeting link
+            </button>
+          </div>
+
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
             <label className="block text-sm font-medium text-[#222753]">Notes</label>
             <textarea
               rows={5}
@@ -208,7 +262,32 @@ export default function BookingDetailClient({
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-xl border border-[#222753]/10 bg-white p-6">
+          {(() => {
+            const questions = [
+              ...GENERIC_INTAKE_QUESTIONS,
+              ...(booking.service ? SERVICE_INTAKE_QUESTIONS[booking.service] ?? [] : []),
+            ].filter((q) => booking.intake_answers?.[q.id]);
+
+            if (questions.length === 0) return null;
+
+            return (
+              <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
+                <h2 className="text-sm font-semibold text-[#222753]">Intake answers</h2>
+                <div className="mt-3 space-y-2 text-sm">
+                  {questions.map((q) => (
+                    <div key={q.id} className="flex justify-between gap-4">
+                      <span className="text-[#222753]/50">{q.label}</span>
+                      <span className="text-right font-medium text-[#222753]">
+                        {booking.intake_answers[q.id]}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
             <h2 className="text-sm font-semibold text-[#222753]">Payment</h2>
             <div className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between">
@@ -252,7 +331,7 @@ export default function BookingDetailClient({
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#222753]/10 bg-white p-6 text-sm">
+          <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6 text-sm">
             <h2 className="text-sm font-semibold text-[#222753]">Record</h2>
             <div className="mt-3 space-y-1.5 text-[#222753]/50">
               <p>Created {new Date(booking.created_at).toLocaleString()}</p>

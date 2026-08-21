@@ -58,8 +58,8 @@ export default function BookingsTable({
     <div className="space-y-3">
       {error && <p className="text-sm text-red-600">{error}</p>}
 
-      <div className="overflow-hidden rounded-xl border border-[#222753]/10 bg-white">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-xl border border-[#222753]/10 bg-white">
+        <table className="w-full min-w-[640px] text-sm">
           <thead>
             <tr className="border-b border-[#222753]/10 text-left text-xs uppercase tracking-wide text-[#222753]/40">
               <th className="px-6 py-3 font-medium">Client</th>

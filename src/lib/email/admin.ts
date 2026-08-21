@@ -1,6 +1,4 @@
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { resend } from "@/lib/email/core";
 
 export async function sendAdminOtpEmail(to: string, code: string) {
   const { error } = await resend.emails.send({

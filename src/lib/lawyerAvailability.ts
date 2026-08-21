@@ -90,3 +90,25 @@ export function slotsForLawyerDay(
   if (!range) return [];
   return slotsForRange(range.start_time, range.end_time, durationMinutes);
 }
+
+/** Bookable start times where EVERY given lawyer is free (intersection) —
+ * used for multi-consultant "collection" bookings redeemed off a booking
+ * link with 2+ attached lawyers. */
+export function slotsForLawyersDay(
+  availability: LawyerAvailability[],
+  lawyerIds: string[],
+  weekday: number,
+  durationMinutes: number
+) {
+  if (lawyerIds.length === 0) return [];
+
+  const [first, ...rest] = lawyerIds;
+  let common = new Set(slotsForLawyerDay(availability, first, weekday, durationMinutes));
+
+  for (const lawyerId of rest) {
+    const slots = new Set(slotsForLawyerDay(availability, lawyerId, weekday, durationMinutes));
+    common = new Set([...common].filter((t) => slots.has(t)));
+  }
+
+  return [...common].sort();
+}

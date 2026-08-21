@@ -29,6 +29,7 @@ export default function CreateBookingForm({
     client_email: "",
     client_phone: "",
     service: "",
+    title: "",
     scheduled_at: "",
     lawyer_id: "",
     duration_minutes: "",
@@ -94,9 +95,9 @@ export default function CreateBookingForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-xl space-y-4 rounded-xl border border-[#222753]/10 bg-white p-6"
+      className="max-w-xl space-y-4 rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6"
     >
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Client name</label>
           <input
@@ -118,7 +119,7 @@ export default function CreateBookingForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Phone</label>
           <input
@@ -144,7 +145,7 @@ export default function CreateBookingForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Lawyer</label>
           <select
@@ -177,7 +178,7 @@ export default function CreateBookingForm({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Scheduled for</label>
           <input
@@ -205,6 +206,16 @@ export default function CreateBookingForm({
             </p>
           )}
         </div>
+      </div>
+
+      <div>
+        <label className={labelClass}>Appointment title (optional)</label>
+        <input
+          value={form.title}
+          onChange={(e) => set("title", e.target.value)}
+          placeholder="Custom title for this appointment"
+          className={inputClass}
+        />
       </div>
 
       <div>

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getBooking } from "@/lib/bookings";
 import { listLawyers } from "@/lib/lawyers";
+import { listLawyerIdsForBooking } from "@/lib/bookingLawyers";
 import BookingDetailClient from "@/components/admin/BookingDetailClient";
 
 export default async function AdminBookingDetailPage({
@@ -13,5 +14,9 @@ export default async function AdminBookingDetailPage({
 
   if (!booking) notFound();
 
-  return <BookingDetailClient initialBooking={booking} lawyers={lawyers} />;
+  const extraLawyerIds = booking.lawyer_id ? [] : await listLawyerIdsForBooking(booking.id);
+
+  return (
+    <BookingDetailClient initialBooking={booking} lawyers={lawyers} multiLawyerIds={extraLawyerIds} />
+  );
 }

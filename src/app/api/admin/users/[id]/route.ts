@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { getUserRole } from "@/lib/roles";
 
 export async function DELETE(
   request: Request,
@@ -9,6 +10,9 @@ export async function DELETE(
   const sessionUser = await getSessionUser();
   if (!sessionUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (getUserRole(sessionUser) !== "admin") {
+    return NextResponse.json({ error: "Only admins can remove dashboard access" }, { status: 403 });
   }
 
   const { id } = await params;

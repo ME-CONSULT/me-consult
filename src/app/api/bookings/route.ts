@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createBooking, updateBooking, SlotUnavailableError } from "@/lib/bookings";
+import { upsertClientForBooking } from "@/lib/clients";
+import { isEmailBlocked } from "@/lib/blockedEmails";
 import { getLawyer } from "@/lib/lawyers";
 import { getRate } from "@/lib/consultationRates";
 import { listAvailability, slotsForLawyerDay } from "@/lib/lawyerAvailability";
@@ -18,6 +20,7 @@ export async function POST(request: Request) {
     client_phone,
     service,
     notes,
+    intake_answers,
     lawyer_id,
     duration_minutes,
     date,
@@ -30,6 +33,10 @@ export async function POST(request: Request) {
   }
   if (typeof client_email !== "string" || !client_email.includes("@")) {
     return NextResponse.json({ error: "A valid email is required" }, { status: 400 });
+  }
+  if (await isEmailBlocked(client_email)) {
+    // Generic error — don't reveal that this is a blocklist hit.
+    return NextResponse.json({ error: "We couldn't process this booking. Please contact us directly." }, { status: 400 });
   }
   if (terms_accepted !== true) {
     return NextResponse.json({ error: "You must accept the terms and conditions" }, { status: 400 });
@@ -72,14 +79,26 @@ export async function POST(request: Request) {
   }
   const { feeKobo, vatKobo, totalKobo } = computeTotal(rate.fee_kobo, settings.vat_rate);
 
+  const normalizedIntakeAnswers =
+    intake_answers && typeof intake_answers === "object" && !Array.isArray(intake_answers)
+      ? intake_answers
+      : {};
+
+  const trimmedName = client_name.trim();
+  const normalizedEmail = client_email.trim().toLowerCase();
+  const trimmedPhone = typeof client_phone === "string" ? client_phone.trim() || null : null;
+  const client = await upsertClientForBooking(normalizedEmail, trimmedName, trimmedPhone);
+
   let booking;
   try {
     booking = await createBooking({
-      client_name: client_name.trim(),
-      client_email: client_email.trim().toLowerCase(),
-      client_phone: typeof client_phone === "string" ? client_phone.trim() || null : null,
+      client_name: trimmedName,
+      client_email: normalizedEmail,
+      client_phone: trimmedPhone,
+      client_id: client.id,
       service: typeof service === "string" ? service : null,
       notes: typeof notes === "string" ? notes.trim() || null : null,
+      intake_answers: normalizedIntakeAnswers,
       scheduled_at: scheduledAt.toISOString(),
       lawyer_id: lawyer.id,
       duration_minutes,
