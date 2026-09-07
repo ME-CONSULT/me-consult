@@ -60,7 +60,7 @@ export default function AboutPage() {
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link
-                    href="/contact#online-consultation"
+                    href="/book"
                     className="hover-glow rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
                   >
                     Book a Consultation
