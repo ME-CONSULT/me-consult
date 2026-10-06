@@ -46,3 +46,4 @@ next-env.d.ts
 # unused source photo originals (see public/hero*.png, public/*.jpeg for the ones in use)
 public/download/
 public/download.zip
+screenshots/

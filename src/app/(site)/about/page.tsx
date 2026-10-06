@@ -109,12 +109,12 @@ export default function AboutPage() {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5 sm:p-12 lg:p-16">
             <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-              <div className="relative order-2 h-72 overflow-hidden rounded-2xl sm:h-96 lg:order-1">
+              <div className="relative order-2 h-80 overflow-hidden rounded-2xl sm:h-[28rem] lg:order-1 lg:h-[34rem]">
                 <Image
                   src="/Mary Ekemezie - .jpg"
                   alt="Mary Ekemezie, Founder and Lead Consultant"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               </div>
 

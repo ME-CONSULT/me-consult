@@ -83,12 +83,15 @@ export default function ContactPage() {
                 </dl>
               </Reveal>
 
-              <Reveal delay={150} className="flex items-center justify-center rounded-2xl bg-white p-8 shadow-sm ring-1 ring-[#222753]/5">
-                <p className="text-center text-sm leading-6 text-[#222753]/60">
-                  17 Ibikunle Street, Yaba, Lagos State.
-                  <br />
-                  Map coming soon.
-                </p>
+              <Reveal delay={150} className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[#222753]/5">
+                <iframe
+                  title="ME Consult office location"
+                  src="https://www.google.com/maps?q=17+Ibikunle+Street,+Yaba,+Lagos,+Nigeria&output=embed"
+                  className="h-80 w-full border-0 lg:h-full lg:min-h-[24rem]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
               </Reveal>
             </div>
           </div>

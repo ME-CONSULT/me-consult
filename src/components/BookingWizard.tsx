@@ -88,6 +88,15 @@ export default function BookingWizard({
       ? rates.find((r) => r.lawyer_id === lawyer.id && r.duration_minutes === duration)
       : undefined;
   const pricing = priceFor(rate, currency, vatRate);
+  const pricedDurations = lawyer
+    ? durations.filter(({ minutes }) =>
+        priceFor(
+          rates.find((r) => r.lawyer_id === lawyer.id && r.duration_minutes === minutes),
+          currency,
+          vatRate,
+        ),
+      )
+    : [];
   const availableTimes =
     lawyer && duration && date
       ? slotsForLawyerDay(availability, lawyer.id, weekdayOf(date), duration)
@@ -242,7 +251,25 @@ export default function BookingWizard({
         </div>
       )}
 
-      {step === "duration" && lawyer && (
+      {step === "duration" && lawyer && pricedDurations.length === 0 && (
+        <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-[#222753]/10">
+          <p className="font-semibold text-[#222753]">
+            {`Online booking with ${lawyer.first_name} isn't open yet`}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-[#222753]/60">
+            Get in touch and our team will arrange a consultation with {lawyer.first_name} for
+            you, or go back and choose another member of our team.
+          </p>
+          <Link
+            href="/contact"
+            className="hover-glow mt-5 inline-block rounded-full bg-[#222753] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#222753]/90"
+          >
+            Contact us
+          </Link>
+        </div>
+      )}
+
+      {step === "duration" && lawyer && pricedDurations.length > 0 && (
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {durations.map(({ minutes: d }) => {
             const r = rates.find((r) => r.lawyer_id === lawyer.id && r.duration_minutes === d);
