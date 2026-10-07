@@ -17,7 +17,7 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ token: string }> }
 ) {
-  const limited = rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
+  const limited = await rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
   if (limited) return limited;
 
   const { token } = await params;

@@ -5,7 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { sendClientPasswordResetEmail } from "@/lib/email/client";
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, "portal-forgot", { limit: 5, windowMs: 15 * 60 * 1000 });
+  const limited = await rateLimit(request, "portal-forgot", { limit: 5, windowMs: 15 * 60 * 1000 });
   if (limited) return limited;
 
   const { email } = await request.json();

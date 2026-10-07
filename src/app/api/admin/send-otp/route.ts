@@ -5,7 +5,7 @@ import { sendAdminOtpEmail } from "@/lib/email/admin";
 import { generateOtpCode, createChallenge, sentRecently, type AdminOtpChallenge } from "@/lib/adminOtpChallenge";
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, "admin-otp-send", { limit: 5, windowMs: 15 * 60 * 1000 });
+  const limited = await rateLimit(request, "admin-otp-send", { limit: 5, windowMs: 15 * 60 * 1000 });
   if (limited) return limited;
 
   const { email } = await request.json();

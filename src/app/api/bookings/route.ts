@@ -14,7 +14,7 @@ import { initializeTransaction, PaystackNotConfiguredError } from "@/lib/paystac
 import { sendBookingConfirmationEmail, sendNewBookingNotificationEmail } from "@/lib/email/booking";
 
 export async function POST(request: Request) {
-  const limited = rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
+  const limited = await rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
   if (limited) return limited;
 
   const body = await request.json();
