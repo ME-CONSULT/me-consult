@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import { listLawyers, createLawyer } from "@/lib/lawyers";
 
 const VALID_TIERS = ["consultant_associate", "lead_consultant", "of_counsel"];
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -16,7 +17,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -30,6 +30,12 @@ export async function confirmBookingPayment(
     if (!result.success) {
       return { booking, error: "Payment was not successful" };
     }
+    if (booking.amount_kobo != null && result.amountKobo < booking.amount_kobo) {
+      console.error(
+        `Underpayment on ${reference}: paid ${result.amountKobo}, expected ${booking.amount_kobo}`
+      );
+      return { booking, error: "Payment amount did not match the booking total" };
+    }
 
     const lawyer = booking.lawyer_id ? await getLawyer(booking.lawyer_id) : null;
     booking = await updateBooking(booking.id, { payment_status: "paid", status: "active" });

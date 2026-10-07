@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
 import { supabaseAdmin, listStaffUsers, getAdminUserByEmail } from "@/lib/supabase/admin";
-import { getUserRole, type Role } from "@/lib/roles";
+import { getUserRole, type Role, isStaffRole } from "@/lib/roles";
 import { sendAdminInviteEmail } from "@/lib/email/admin";
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -27,7 +27,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (getUserRole(sessionUser) !== "admin") {

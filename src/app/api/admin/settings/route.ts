@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/roles";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import { getSettings, updateSettings } from "@/lib/settings";
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -15,7 +15,7 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

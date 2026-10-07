@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
+import { getUserRole } from "@/lib/roles";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { sendClientPasswordResetEmail } from "@/lib/email/client";
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "portal-forgot", { limit: 5, windowMs: 15 * 60 * 1000 });
+  if (limited) return limited;
+
   const { email } = await request.json();
 
   if (typeof email !== "string" || !email) {
@@ -21,6 +26,12 @@ export async function POST(request: Request) {
   });
 
   if (linkError || !linkData.properties?.hashed_token) {
+    return NextResponse.json({ ok: true });
+  }
+
+  // Portal password resets are for client accounts only; staff sign in
+  // through the admin email-code flow.
+  if (getUserRole(linkData.user) !== "client") {
     return NextResponse.json({ ok: true });
   }
 

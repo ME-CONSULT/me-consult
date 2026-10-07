@@ -14,5 +14,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error }, { status: 404 });
   }
 
-  return NextResponse.json({ booking, error });
+  // Anyone holding a reference can hit this, so return status only, never
+  // the client's details or intake answers.
+  return NextResponse.json({
+    booking: { status: booking.status, payment_status: booking.payment_status },
+    error,
+  });
 }

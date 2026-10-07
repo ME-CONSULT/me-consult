@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 import { supabaseAdmin, getAdminUserByEmail } from "@/lib/supabase/admin";
 import { supabaseServerAuth } from "@/lib/supabase/server";
 import { checkChallenge, type AdminOtpChallenge } from "@/lib/adminOtpChallenge";
@@ -6,6 +7,9 @@ import { checkChallenge, type AdminOtpChallenge } from "@/lib/adminOtpChallenge"
 const INVALID_CODE_MESSAGE = "That code is invalid or has expired. Request a new one.";
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "admin-otp-verify", { limit: 10, windowMs: 15 * 60 * 1000 });
+  if (limited) return limited;
+
   const { email, code } = await request.json();
 
   if (typeof email !== "string" || typeof code !== "string") {

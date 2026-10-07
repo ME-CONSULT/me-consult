@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { getUserRole } from "@/lib/roles";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (getUserRole(sessionUser) !== "admin") {

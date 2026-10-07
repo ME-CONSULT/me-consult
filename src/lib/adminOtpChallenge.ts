@@ -28,6 +28,15 @@ export function createChallenge(code: string, tokenHash: string): AdminOtpChalle
   };
 }
 
+const RESEND_COOLDOWN_MS = 60 * 1000;
+
+/** True if a code was issued within the resend cooldown window. */
+export function sentRecently(challenge: AdminOtpChallenge | null | undefined) {
+  if (!challenge) return false;
+  const issuedAt = challenge.expiresAt - OTP_TTL_MS;
+  return Date.now() - issuedAt < RESEND_COOLDOWN_MS;
+}
+
 export function checkChallenge(
   challenge: AdminOtpChallenge | null | undefined,
   code: string

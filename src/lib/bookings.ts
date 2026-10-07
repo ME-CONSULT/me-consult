@@ -178,7 +178,11 @@ export async function listPayments() {
 
 export async function searchBookings(q: string, limit = 8) {
   const supabase = supabaseAdmin();
-  const pattern = `%${q}%`;
+  // Strip characters that carry meaning in a PostgREST filter string so the
+  // search text can't add or alter filter clauses.
+  const safe = q.replace(/[,()*%\\"]/g, " ").trim();
+  if (!safe) return [];
+  const pattern = `%${safe}%`;
   const { data, error } = await supabase
     .from("bookings")
     .select("*")

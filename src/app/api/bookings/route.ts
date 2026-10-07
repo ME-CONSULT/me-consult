@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 import { createBooking, updateBooking, SlotUnavailableError } from "@/lib/bookings";
 import { upsertClientForBooking } from "@/lib/clients";
 import { isEmailBlocked } from "@/lib/blockedEmails";
@@ -13,6 +14,9 @@ import { initializeTransaction, PaystackNotConfiguredError } from "@/lib/paystac
 import { sendBookingConfirmationEmail, sendNewBookingNotificationEmail } from "@/lib/email/booking";
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
+  if (limited) return limited;
+
   const body = await request.json();
   const {
     client_name,

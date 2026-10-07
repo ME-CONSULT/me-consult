@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import { searchBookings } from "@/lib/bookings";
 import { searchAdminUsers } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

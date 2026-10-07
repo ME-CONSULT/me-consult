@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 import { supabaseAdmin, getAdminUserByEmail } from "@/lib/supabase/admin";
 import { sendAdminOtpEmail } from "@/lib/email/admin";
-import { generateOtpCode, createChallenge } from "@/lib/adminOtpChallenge";
+import { generateOtpCode, createChallenge, sentRecently, type AdminOtpChallenge } from "@/lib/adminOtpChallenge";
 
 export async function POST(request: Request) {
+  const limited = rateLimit(request, "admin-otp-send", { limit: 5, windowMs: 15 * 60 * 1000 });
+  if (limited) return limited;
+
   const { email } = await request.json();
 
   if (typeof email !== "string" || !email) {
@@ -18,6 +22,12 @@ export async function POST(request: Request) {
   // account type in this system.
   const user = await getAdminUserByEmail(normalizedEmail);
   if (!user) {
+    return NextResponse.json({ ok: true });
+  }
+
+  // Don't issue a fresh code (and reset the attempt counter) more than once
+  // a minute; the code already sent is still valid.
+  if (sentRecently(user.app_metadata?.admin_otp as AdminOtpChallenge | undefined)) {
     return NextResponse.json({ ok: true });
   }
 

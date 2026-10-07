@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import { listBookings, createBooking, SlotUnavailableError, type BookingStatus } from "@/lib/bookings";
 import { upsertClientForBooking } from "@/lib/clients";
 
@@ -7,7 +8,7 @@ const VALID_STATUSES: BookingStatus[] = ["pending", "active", "completed", "canc
 
 export async function GET(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -24,7 +25,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

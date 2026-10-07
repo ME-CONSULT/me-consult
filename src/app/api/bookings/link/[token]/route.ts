@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/rateLimit";
 import { createBooking, updateBooking, SlotUnavailableError } from "@/lib/bookings";
 import { upsertClientForBooking } from "@/lib/clients";
 import { isEmailBlocked } from "@/lib/blockedEmails";
@@ -16,6 +17,9 @@ export async function POST(
   request: Request,
   { params }: { params: Promise<{ token: string }> }
 ) {
+  const limited = rateLimit(request, "booking", { limit: 10, windowMs: 10 * 60 * 1000 });
+  if (limited) return limited;
+
   const { token } = await params;
   const result = await getBookingLinkByToken(token);
   if (!result) {

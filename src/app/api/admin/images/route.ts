@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import { listImages, uploadDocument, deleteDocument, IMAGES_PREFIX } from "@/lib/r2";
 
 const MAX_SIZE_BYTES = 8 * 1024 * 1024;
@@ -7,7 +8,7 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/svg+xml",
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -17,7 +18,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -47,7 +48,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/roles";
+import { getUserRole, isStaffRole } from "@/lib/roles";
 import {
   listRates,
   upsertRate,
@@ -14,7 +14,7 @@ const CURRENCY_FIELDS: RateCurrencyField[] = ["fee_kobo", "fee_usd_cents", "fee_
 
 export async function GET() {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (getUserRole(sessionUser) !== "admin") {
@@ -27,7 +27,7 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (getUserRole(sessionUser) !== "admin") {
@@ -69,7 +69,7 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   const sessionUser = await getSessionUser();
-  if (!sessionUser) {
+  if (!sessionUser || !isStaffRole(getUserRole(sessionUser))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   if (getUserRole(sessionUser) !== "admin") {
