@@ -63,7 +63,7 @@ export async function POST(
     );
   }
 
-  if (await isSlotTaken(lawyer.id, scheduledAt.toISOString())) {
+  if (await isSlotTaken(lawyer.id, scheduledAt.toISOString(), booking.duration_minutes, booking.id)) {
     return NextResponse.json({ error: "That slot is no longer available" }, { status: 409 });
   }
 

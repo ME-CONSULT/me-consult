@@ -1,7 +1,7 @@
 import { getSettings } from "@/lib/settings";
 import { listLawyers } from "@/lib/lawyers";
 import { listRates } from "@/lib/consultationRates";
-import { listAvailability } from "@/lib/lawyerAvailability";
+import { listAvailability, listDurationSlots } from "@/lib/lawyerAvailability";
 import { listDurations } from "@/lib/durations";
 import { listBlockedEmails } from "@/lib/blockedEmails";
 import { getSessionUser } from "@/lib/supabase/server";
@@ -11,6 +11,7 @@ import SettingsLawyersManager from "@/components/admin/SettingsLawyersManager";
 import SettingsDurationsManager from "@/components/admin/SettingsDurationsManager";
 import SettingsRatesEditor from "@/components/admin/SettingsRatesEditor";
 import SettingsAvailabilityEditor from "@/components/admin/SettingsAvailabilityEditor";
+import SettingsDurationSlotsEditor from "@/components/admin/SettingsDurationSlotsEditor";
 import SettingsBlocklistManager from "@/components/admin/SettingsBlocklistManager";
 import SettingsDefaultBookingForm from "@/components/admin/SettingsDefaultBookingForm";
 
@@ -18,13 +19,14 @@ export default async function AdminSettingsPage() {
   const sessionUser = await getSessionUser();
   const isAdmin = getUserRole(sessionUser) === "admin";
 
-  const [settings, lawyers, rates, availability, durations, blockedEmails] = await Promise.all([
+  const [settings, lawyers, rates, availability, durations, blockedEmails, durationSlots] = await Promise.all([
     getSettings(),
     listLawyers(),
     listRates(),
     listAvailability(),
     listDurations(),
     listBlockedEmails(),
+    listDurationSlots(),
   ]);
 
   return (
@@ -67,6 +69,15 @@ export default async function AdminSettingsPage() {
           <div>
             <h3 className="mb-3 text-sm font-semibold text-[#222753]">Lawyer availability</h3>
             <SettingsAvailabilityEditor lawyers={lawyers} initialAvailability={availability} />
+          </div>
+
+          <div>
+            <h3 className="mb-3 text-sm font-semibold text-[#222753]">Fixed start times</h3>
+            <SettingsDurationSlotsEditor
+              lawyers={lawyers}
+              durations={durations}
+              initialSlots={durationSlots}
+            />
           </div>
 
           <div>

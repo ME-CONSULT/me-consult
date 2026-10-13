@@ -7,17 +7,72 @@ export type LawyerAvailability = {
   start_time: string; // "HH:MM:SS"
   end_time: string;
   updated_at: string;
+  /** Fixed start times ("HH:MM") by duration in minutes, for this lawyer.
+   * Attached by listAvailability(); overrides generated slots when present. */
+  fixed_slots?: Record<number, string[]>;
+};
+
+export type LawyerDurationSlot = {
+  id: string;
+  lawyer_id: string;
+  duration_minutes: number;
+  start_time: string; // "HH:MM:SS"
 };
 
 export async function listAvailability() {
   const supabase = supabaseAdmin();
-  const { data, error } = await supabase
-    .from("lawyer_availability")
-    .select("*")
-    .order("weekday", { ascending: true });
+  const [{ data, error }, slots] = await Promise.all([
+    supabase.from("lawyer_availability").select("*").order("weekday", { ascending: true }),
+    listDurationSlots(),
+  ]);
 
   if (error) throw error;
-  return data as LawyerAvailability[];
+
+  const byLawyer = new Map<string, Record<number, string[]>>();
+  for (const slot of slots) {
+    const map = byLawyer.get(slot.lawyer_id) ?? {};
+    (map[slot.duration_minutes] ??= []).push(slot.start_time.slice(0, 5));
+    byLawyer.set(slot.lawyer_id, map);
+  }
+
+  return (data as LawyerAvailability[]).map((a) => ({
+    ...a,
+    fixed_slots: byLawyer.get(a.lawyer_id),
+  }));
+}
+
+export async function listDurationSlots() {
+  const supabase = supabaseAdmin();
+  const { data, error } = await supabase
+    .from("lawyer_duration_slots")
+    .select("id, lawyer_id, duration_minutes, start_time")
+    .order("start_time", { ascending: true });
+
+  // Table not created yet (migration 0017): behave as if no fixed slots.
+  if (error) {
+    if (error.code === "42P01" || error.code === "PGRST205") return [];
+    throw error;
+  }
+  return data as LawyerDurationSlot[];
+}
+
+/** Replaces the fixed start times for one lawyer + duration. */
+export async function setDurationSlots(lawyerId: string, durationMinutes: number, startTimes: string[]) {
+  const supabase = supabaseAdmin();
+  const { error: deleteError } = await supabase
+    .from("lawyer_duration_slots")
+    .delete()
+    .eq("lawyer_id", lawyerId)
+    .eq("duration_minutes", durationMinutes);
+  if (deleteError) throw deleteError;
+
+  const unique = [...new Set(startTimes)].sort();
+  if (unique.length === 0) return;
+
+  const { error } = await supabase.from("lawyer_duration_slots").insert(
+    unique.map((start_time) => ({ lawyer_id: lawyerId, duration_minutes: durationMinutes, start_time }))
+  );
+  if (error) throw error;
 }
 
 export async function upsertAvailability(
@@ -88,6 +143,10 @@ export function slotsForLawyerDay(
 ) {
   const range = availability.find((a) => a.lawyer_id === lawyerId && a.weekday === weekday);
   if (!range) return [];
+
+  const fixed = range.fixed_slots?.[durationMinutes];
+  if (fixed && fixed.length > 0) return [...fixed].sort();
+
   return slotsForRange(range.start_time, range.end_time, durationMinutes);
 }
 

@@ -1,4 +1,5 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { isAnyLawyerBooked } from "@/lib/bookingLawyers";
 
 export type BookingStatus = "pending" | "active" | "completed" | "cancelled";
 export type PaymentStatus = "unpaid" | "paid" | "refunded";
@@ -221,16 +222,12 @@ export async function listBookingsBetween(startISO: string, endISO: string) {
   return data as Booking[];
 }
 
-export async function isSlotTaken(lawyerId: string, scheduledAt: string) {
-  const supabase = supabaseAdmin();
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("id")
-    .eq("lawyer_id", lawyerId)
-    .eq("scheduled_at", scheduledAt)
-    .in("status", ["pending", "active"])
-    .limit(1);
-
-  if (error) throw error;
-  return (data?.length ?? 0) > 0;
+/** True if the lawyer has a pending/active booking overlapping this slot. */
+export async function isSlotTaken(
+  lawyerId: string,
+  scheduledAt: string,
+  durationMinutes: number,
+  excludeBookingId?: string
+) {
+  return isAnyLawyerBooked([lawyerId], scheduledAt, durationMinutes, excludeBookingId);
 }

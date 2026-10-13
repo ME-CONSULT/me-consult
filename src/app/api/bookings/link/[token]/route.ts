@@ -77,7 +77,7 @@ export async function POST(
     );
   }
 
-  if (await isAnyLawyerBooked(lawyer_ids, scheduledAt.toISOString())) {
+  if (await isAnyLawyerBooked(lawyer_ids, scheduledAt.toISOString(), link.duration_minutes)) {
     return NextResponse.json({ error: "That slot is no longer available. Please choose another." }, { status: 409 });
   }
 

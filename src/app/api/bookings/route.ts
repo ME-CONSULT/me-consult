@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { rateLimit } from "@/lib/rateLimit";
-import { createBooking, updateBooking, SlotUnavailableError } from "@/lib/bookings";
+import { createBooking, updateBooking, isSlotTaken, SlotUnavailableError } from "@/lib/bookings";
 import { upsertClientForBooking } from "@/lib/clients";
 import { isEmailBlocked } from "@/lib/blockedEmails";
 import { getLawyer } from "@/lib/lawyers";
@@ -75,6 +75,10 @@ export async function POST(request: Request) {
       { error: `Bookings need at least ${settings.booking_notice_hours} hours' notice` },
       { status: 400 }
     );
+  }
+
+  if (await isSlotTaken(lawyer.id, scheduledAt.toISOString(), duration_minutes)) {
+    return NextResponse.json({ error: "That slot is no longer available. Please choose another." }, { status: 409 });
   }
 
   const rate = await getRate(lawyer.id, duration_minutes);
