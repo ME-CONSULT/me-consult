@@ -23,7 +23,6 @@ import {
   type IntakeQuestion,
 } from "@/lib/intakeQuestions";
 
-const CURRENCIES: Currency[] = ["NGN", "USD", "GBP"];
 type Step = "lawyer" | "duration" | "schedule" | "details" | "review" | "done";
 const STEP_ORDER: Step[] = ["lawyer", "duration", "schedule", "details", "review"];
 
@@ -66,7 +65,9 @@ export default function BookingWizard({
   defaultCurrency: Currency;
 }) {
   const [step, setStep] = useState<Step>("lawyer");
-  const [currency, setCurrency] = useState<Currency>(defaultCurrency);
+  // Display currency comes from the visitor's location (see detectCurrency);
+  // customers don't pick it. Checkout is always charged in NGN.
+  const currency = defaultCurrency;
   const [lawyerId, setLawyerId] = useState<string | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
   const [date, setDate] = useState("");
@@ -187,28 +188,11 @@ export default function BookingWizard({
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16 lg:py-20">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-[#c9a600]">
-            Online Consultation
-          </p>
-          <h1 className="mt-2 text-3xl font-bold text-[#222753]">Book a Consultation</h1>
-        </div>
-        <div className="flex gap-1 pt-1">
-          {CURRENCIES.map((c) => (
-            <button
-              key={c}
-              onClick={() => setCurrency(c)}
-              className={`rounded-lg px-2 py-1 text-xs font-medium transition ${
-                currency === c
-                  ? "bg-[#222753] text-white"
-                  : "text-[#222753]/40 hover:text-[#222753]"
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
+      <div>
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#c9a600]">
+          Online Consultation
+        </p>
+        <h1 className="mt-2 text-3xl font-bold text-[#222753]">Book a Consultation</h1>
       </div>
       <p className="mt-2 text-sm text-[#222753]/60">
         Step {stepIndex(step) + 1} of {STEP_ORDER.length}

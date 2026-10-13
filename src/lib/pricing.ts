@@ -30,5 +30,12 @@ export function computeMoneyTotal(minorUnits: number, vatRatePercent: number) {
 
 export function formatMoney(minorUnits: number | null | undefined, currency: Currency) {
   if (minorUnits === null || minorUnits === undefined) return "—";
-  return `${CURRENCY_SYMBOLS[currency]}${(minorUnits / 100).toLocaleString()}`;
+  const amount = minorUnits / 100;
+  // Show pence/cents only when there are any, and then always two digits
+  // (£322.50, not £322.5).
+  const digits = Number.isInteger(amount) ? 0 : 2;
+  return `${CURRENCY_SYMBOLS[currency]}${amount.toLocaleString("en-US", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: 2,
+  })}`;
 }
