@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import BookingCalendar, { minSelectableDate } from "@/components/BookingCalendar";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Video, Clock, Wallet, ChevronLeft, ChevronRight, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Video, Clock, Wallet, Loader2, CheckCircle2 } from "lucide-react";
 import type { Lawyer } from "@/lib/lawyers";
 import type { LawyerAvailability } from "@/lib/lawyerAvailability";
 import { slotsForLawyerDay } from "@/lib/lawyerAvailability";
@@ -12,26 +13,6 @@ import { combineLagosDateTime, isBusinessDay, meetsNotice, weekdayOf } from "@/l
 
 type Step = "schedule" | "details" | "review" | "done";
 
-const WEEKDAY_LABELS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
-
-function toDateStr(d: Date) {
-  return d.toISOString().slice(0, 10);
-}
-
-function monthGrid(year: number, month: number) {
-  const first = new Date(Date.UTC(year, month, 1));
-  const firstWeekday = (first.getUTCDay() + 6) % 7; // 0 = Monday
-  const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-
-  const cells: (Date | null)[] = [];
-  for (let i = 0; i < firstWeekday; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(Date.UTC(year, month, d)));
-  while (cells.length % 7 !== 0) cells.push(null);
-
-  const weeks: (Date | null)[][] = [];
-  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
-  return weeks;
-}
 
 export default function DefaultBookingWizard({
   lawyer,
@@ -50,10 +31,7 @@ export default function DefaultBookingWizard({
   businessDays: number[];
   availability: LawyerAvailability[];
 }) {
-  const today = new Date();
   const [step, setStep] = useState<Step>("schedule");
-  const [viewYear, setViewYear] = useState(today.getFullYear());
-  const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
   const [clientName, setClientName] = useState("");
@@ -66,23 +44,21 @@ export default function DefaultBookingWizard({
   const [stubbed, setStubbed] = useState(false);
 
   const pricing = computeMoneyTotal(feeKobo, vatRate);
-  const minDate = toDateStr(new Date(Date.now() + noticeHours * 60 * 60 * 1000));
-  const weeks = monthGrid(viewYear, viewMonth);
+  const minDate = minSelectableDate(noticeHours);
   const availableTimes = date ? slotsForLawyerDay(availability, lawyer.id, weekdayOf(date), durationMinutes) : [];
 
-  function isSelectable(d: Date) {
-    const dStr = toDateStr(d);
+  function isSelectable(dStr: string) {
     if (dStr < minDate) return false;
     if (!isBusinessDay(dStr, businessDays)) return false;
     // Also require the consultant to actually have hours that day — global
     // "bookable days" is a business-wide setting and can include days this
     // specific consultant doesn't work, which otherwise looks clickable but
     // always resolves to "not available."
-    return slotsForLawyerDay(availability, lawyer.id, d.getUTCDay(), durationMinutes).length > 0;
+    return slotsForLawyerDay(availability, lawyer.id, weekdayOf(dStr), durationMinutes).length > 0;
   }
 
-  function selectDate(d: Date) {
-    setDate(toDateStr(d));
+  function selectDate(dStr: string) {
+    setDate(dStr);
     setTime(null);
   }
 
@@ -190,73 +166,8 @@ export default function DefaultBookingWizard({
             <div>
               <h2 className="text-lg font-semibold text-[#222753]">Select Date and Time</h2>
 
-              <div className="mt-4 rounded-2xl border border-[#222753]/10 p-4">
-                <div className="flex items-center justify-between">
-                  <button
-                    onClick={() => {
-                      const m = viewMonth === 0 ? 11 : viewMonth - 1;
-                      setViewYear(viewMonth === 0 ? viewYear - 1 : viewYear);
-                      setViewMonth(m);
-                    }}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-[#222753]/15 text-[#222753]/60 hover:bg-[#222753]/5"
-                    aria-label="Previous month"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <p className="text-sm font-semibold text-[#222753]">
-                    {new Date(Date.UTC(viewYear, viewMonth, 1)).toLocaleDateString("en-US", {
-                      month: "long",
-                      year: "numeric",
-                      timeZone: "UTC",
-                    })}
-                  </p>
-                  <button
-                    onClick={() => {
-                      const m = viewMonth === 11 ? 0 : viewMonth + 1;
-                      setViewYear(viewMonth === 11 ? viewYear + 1 : viewYear);
-                      setViewMonth(m);
-                    }}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-[#222753]/15 text-[#222753]/60 hover:bg-[#222753]/5"
-                    aria-label="Next month"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <div className="mt-4 grid grid-cols-7 gap-1 text-center text-xs font-medium text-[#222753]/40">
-                  {WEEKDAY_LABELS.map((w) => (
-                    <div key={w}>{w}</div>
-                  ))}
-                </div>
-
-                <div className="mt-1 space-y-1">
-                  {weeks.map((week, wi) => (
-                    <div key={wi} className="grid grid-cols-7 gap-1">
-                      {week.map((d, di) => {
-                        if (!d) return <div key={di} />;
-                        const dStr = toDateStr(d);
-                        const selectable = isSelectable(d);
-                        const selected = dStr === date;
-                        return (
-                          <button
-                            key={di}
-                            disabled={!selectable}
-                            onClick={() => selectDate(d)}
-                            className={`aspect-square rounded-full text-sm transition disabled:cursor-not-allowed disabled:text-[#222753]/20 ${
-                              selected
-                                ? "bg-[#222753] font-semibold text-white"
-                                : selectable
-                                  ? "text-[#222753] hover:bg-[#222753]/5"
-                                  : "text-[#222753]/30"
-                            }`}
-                          >
-                            {d.getUTCDate()}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-4">
+                <BookingCalendar value={date} onChange={selectDate} isSelectable={isSelectable} />
               </div>
 
               {date && (

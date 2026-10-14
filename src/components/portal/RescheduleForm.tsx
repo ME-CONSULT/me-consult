@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import BookingCalendar from "@/components/BookingCalendar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -10,10 +11,6 @@ import type { LawyerAvailability } from "@/lib/lawyerAvailability";
 import { slotsForLawyerDay } from "@/lib/lawyerAvailability";
 import { combineLagosDateTime, isBusinessDay, meetsNotice, weekdayOf } from "@/lib/availability";
 
-function minSelectableDate(noticeHours: number) {
-  const d = new Date(Date.now() + noticeHours * 60 * 60 * 1000);
-  return d.toISOString().slice(0, 10);
-}
 
 export default function RescheduleForm({
   booking,
@@ -34,6 +31,14 @@ export default function RescheduleForm({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+
+  // A day is pickable only if it's a business day with at least one start
+  // time that still meets the notice period.
+  function isDaySelectable(d: string) {
+    if (!isBusinessDay(d, businessDays)) return false;
+    const slots = booking.duration_minutes ? slotsForLawyerDay(availability, lawyer.id, weekdayOf(d), booking.duration_minutes) : [];
+    return slots.some((t) => meetsNotice(combineLagosDateTime(d, t), noticeHours));
+  }
 
   const dateIsValid = date ? isBusinessDay(date, businessDays) : true;
   const availableTimes =
@@ -94,19 +99,16 @@ export default function RescheduleForm({
         <div className="mt-6 space-y-5">
           <div>
             <label className="block text-sm font-medium text-[#222753]">New date</label>
-            <input
-              type="date"
-              min={minSelectableDate(noticeHours)}
-              value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
-                setTime(null);
-              }}
-              className="mt-1.5 w-full rounded-lg border border-[#222753]/20 px-4 py-2.5 text-sm text-[#222753] outline-none focus:border-[#222753]"
-            />
-            {date && !dateIsValid && (
-              <p className="mt-1.5 text-sm text-red-600">That day isn&apos;t available for booking.</p>
-            )}
+            <div className="mt-1.5">
+              <BookingCalendar
+                value={date || null}
+                onChange={(d) => {
+                  setDate(d);
+                  setTime(null);
+                }}
+                isSelectable={isDaySelectable}
+              />
+            </div>
           </div>
 
           {date && dateIsValid && availableTimes.length === 0 && (
