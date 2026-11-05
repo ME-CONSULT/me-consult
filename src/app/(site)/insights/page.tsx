@@ -61,10 +61,16 @@ const newsAndEvents = [
   },
 ];
 
-const resources = [
+const resources: { title: string; body: string; file?: string }[] = [
   {
     title: "Startup Compliance Checklist (Nigeria)",
     body: "A roadmap for early-stage ventures navigating CAC, FIRS, and sector-specific filings.",
+    file: "/resources/startup-compliance-checklist-nigeria.pdf",
+  },
+  {
+    title: "The Founder's Strategic Guide to Equity Allocation",
+    body: "How to split founder equity, reward your team and stay compliant with Nigerian law through every funding round.",
+    file: "/resources/founders-guide-to-equity-allocation.pdf",
   },
   {
     title: "Board Evaluation Framework: Self-Assessment Guide",
@@ -294,9 +300,22 @@ export default function InsightsPage() {
                         {resource.body}
                       </p>
                     </div>
-                    <span className="mt-6 text-sm font-semibold text-[#222753]/40">
-                      Coming soon
-                    </span>
+                    {resource.file ? (
+                      <a
+                        href={resource.file}
+                        download
+                        className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#222753] hover:underline"
+                      >
+                        Download PDF
+                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                        </svg>
+                      </a>
+                    ) : (
+                      <span className="mt-6 text-sm font-semibold text-[#222753]/40">
+                        Coming soon
+                      </span>
+                    )}
                   </div>
                 </Reveal>
               ))}
