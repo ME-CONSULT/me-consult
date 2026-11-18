@@ -7,9 +7,13 @@ import { formatNaira } from "@/lib/pricing";
 export default async function BookConfirmPage({
   searchParams,
 }: {
-  searchParams: Promise<{ reference?: string }>;
+  searchParams: Promise<{ reference?: string | string[]; trxref?: string | string[] }>;
 }) {
-  const { reference } = await searchParams;
+  // Paystack appends `?trxref=X&reference=X` to our callback URL, which
+  // already carries `?reference=X`, so `reference` arrives as an array.
+  const params = await searchParams;
+  const first = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v);
+  const reference = first(params.reference) ?? first(params.trxref);
 
   if (!reference) {
     return (

@@ -2,13 +2,24 @@ import { Resend } from "resend";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
+/** Client-typed values (names, notes, intake answers) go into email HTML,
+ * so escape them to stop injected markup or links. */
+export function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function renderRows(rows: [string, string][]) {
   return rows
     .map(
       ([label, value]) => `
         <tr>
-          <td style="padding:6px 0;color:#22275399;font-size:13px;">${label}</td>
-          <td style="padding:6px 0;color:#222753;font-size:13px;font-weight:600;text-align:right;">${value}</td>
+          <td style="padding:6px 12px 6px 0;color:#22275399;font-size:13px;vertical-align:top;">${escapeHtml(label)}</td>
+          <td style="padding:6px 0;color:#222753;font-size:13px;font-weight:600;text-align:right;white-space:pre-line;">${escapeHtml(value)}</td>
         </tr>`
     )
     .join("");

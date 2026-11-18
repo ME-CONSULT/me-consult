@@ -3,7 +3,8 @@ import type { Lawyer } from "@/lib/lawyers";
 import { formatNaira } from "@/lib/pricing";
 import { listStaffUsers } from "@/lib/supabase/admin";
 import { getSettings } from "@/lib/settings";
-import { resend, shell, formatSchedule as formatScheduleAt } from "@/lib/email/core";
+import { resend, shell, escapeHtml, formatSchedule as formatScheduleAt } from "@/lib/email/core";
+import { GENERIC_INTAKE_QUESTIONS, SERVICE_INTAKE_QUESTIONS } from "@/lib/intakeQuestions";
 
 function formatSchedule(booking: Booking) {
   return formatScheduleAt(booking.scheduled_at);
@@ -35,7 +36,9 @@ export async function sendBookingConfirmationEmail(booking: Booking, lawyer: Law
     ? `Thank you, ${booking.client_name}. Your payment was received and your consultation is confirmed.`
     : `Thank you, ${booking.client_name}. We've received your request. Online payment isn't available on the site just yet, so our team will be in touch shortly to arrange payment and confirm your slot.`;
   const footer = paid
-    ? "A member of our team will send a call link ahead of your consultation."
+    ? booking.meeting_url
+      ? "Join with the Google Meet link above at your scheduled time. A calendar invite has also been sent to this email."
+      : "A member of our team will send a call link ahead of your consultation."
     : `Questions in the meantime? Reply to this email or reach us directly.`;
 
   const { error } = await resend.emails.send({
@@ -59,15 +62,39 @@ export async function sendNewBookingNotificationEmail(booking: Booking, lawyer: 
 
   const paid = booking.payment_status === "paid";
   const headline = paid ? "New paid booking" : "New booking — payment not yet arranged";
+  const who = `${escapeHtml(booking.client_name)} (${escapeHtml(booking.client_email)})`;
   const intro = paid
-    ? `${booking.client_name} (${booking.client_email}) just booked and paid online.`
-    : `${booking.client_name} (${booking.client_email}) submitted a booking request, but online payment isn't set up yet — reach out to arrange payment and confirm.`;
+    ? `${who} just booked and paid online.`
+    : `${who} submitted a booking request, but online payment isn't set up yet — reach out to arrange payment and confirm.`;
+
+  // Staff need the full picture, not just the slot: contact details, the
+  // client's message and every intake answer.
+  const clientRows: [string, string][] = [
+    ["Client", booking.client_name],
+    ["Email", booking.client_email],
+    ["Phone", booking.client_phone || "Not given"],
+  ];
+  const intakeQuestions = [
+    ...GENERIC_INTAKE_QUESTIONS,
+    ...(booking.service ? SERVICE_INTAKE_QUESTIONS[booking.service] ?? [] : []),
+  ];
+  for (const q of intakeQuestions) {
+    const answer = booking.intake_answers?.[q.id];
+    if (answer) clientRows.push([q.label, answer]);
+  }
+  if (booking.notes) clientRows.push(["Client's message", booking.notes]);
+  if (booking.paystack_reference) clientRows.push(["Payment reference", booking.paystack_reference]);
 
   const { error } = await resend.emails.send({
     from: "ME Consult Admin <admin@me-consult.org>",
     to: recipients,
     subject: `${headline}: ${booking.client_name}`,
-    html: shell(headline, intro, detailRows(booking, lawyer), "View it in the admin dashboard."),
+    html: shell(
+      headline,
+      intro,
+      [...clientRows, ...detailRows(booking, lawyer)],
+      "View it in the admin dashboard."
+    ),
   });
 
   if (error) throw new Error(error.message);
