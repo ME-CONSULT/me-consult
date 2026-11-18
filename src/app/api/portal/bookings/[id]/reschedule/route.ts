@@ -7,6 +7,7 @@ import { getSettings } from "@/lib/settings";
 import { listAvailability, slotsForLawyerDay } from "@/lib/lawyerAvailability";
 import { combineLagosDateTime, isBusinessDay, meetsNotice, weekdayOf } from "@/lib/availability";
 import { sendRescheduleConfirmationEmail } from "@/lib/email/client";
+import { rescheduleMeetForBooking } from "@/lib/googleMeet";
 
 export async function POST(
   request: Request,
@@ -68,6 +69,10 @@ export async function POST(
   }
 
   const updated = await updateBooking(booking.id, { scheduled_at: scheduledAt.toISOString() });
+
+  await rescheduleMeetForBooking(updated).catch((e) =>
+    console.error("rescheduleMeetForBooking failed:", e)
+  );
 
   sendRescheduleConfirmationEmail(updated).catch((e) =>
     console.error("sendRescheduleConfirmationEmail failed:", e)

@@ -7,6 +7,7 @@ import { sendClientWelcomeEmail, sendInvoiceReadyEmail } from "@/lib/email/clien
 import { ensureClientAccountForBooking } from "@/lib/clientAccounts";
 import { createInvoiceForBooking, type Invoice } from "@/lib/invoices";
 import { InvoicePdf } from "@/components/InvoicePdf";
+import { createMeetForBooking } from "@/lib/googleMeet";
 
 async function generateInvoicePdfBuffer(invoice: Invoice, booking: Booking) {
   return renderToBuffer(<InvoicePdf invoice={invoice} booking={booking} />);
@@ -39,6 +40,16 @@ export async function confirmBookingPayment(
 
     const lawyer = booking.lawyer_id ? await getLawyer(booking.lawyer_id) : null;
     booking = await updateBooking(booking.id, { payment_status: "paid", status: "active" });
+
+    // Auto-create the Google Meet link before the emails go out, so the
+    // confirmation email and confirm page already include it.
+    if (!booking.meeting_url) {
+      const meetUrl = await createMeetForBooking(booking, lawyer).catch((e) => {
+        console.error("createMeetForBooking failed:", e);
+        return null;
+      });
+      if (meetUrl) booking = await updateBooking(booking.id, { meeting_url: meetUrl });
+    }
 
     const accountResult = await ensureClientAccountForBooking(booking).catch((e) => {
       console.error("ensureClientAccountForBooking failed:", e);

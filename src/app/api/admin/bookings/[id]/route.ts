@@ -10,6 +10,7 @@ import {
   type PaymentStatus,
 } from "@/lib/bookings";
 import { sendMeetingLinkEmail } from "@/lib/email/client";
+import { cancelMeetForBooking, rescheduleMeetForBooking } from "@/lib/googleMeet";
 
 const VALID_STATUSES: BookingStatus[] = ["pending", "active", "completed", "cancelled"];
 const VALID_PAYMENT_STATUSES: PaymentStatus[] = ["unpaid", "paid", "refunded"];
@@ -74,6 +75,17 @@ export async function PATCH(
   try {
     const booking = await updateBooking(id, fields);
 
+    if (fields.status === "cancelled" && existing.status !== "cancelled") {
+      await cancelMeetForBooking(id).catch((e) => console.error("cancelMeetForBooking failed:", e));
+    } else if (
+      fields.scheduled_at !== undefined &&
+      booking.scheduled_at !== existing.scheduled_at
+    ) {
+      await rescheduleMeetForBooking(booking).catch((e) =>
+        console.error("rescheduleMeetForBooking failed:", e)
+      );
+    }
+
     if (meetingUrlNewlySet) {
       sendMeetingLinkEmail(booking).catch((e) => console.error("sendMeetingLinkEmail failed:", e));
     }
@@ -98,5 +110,6 @@ export async function DELETE(
 
   const { id } = await params;
   await deleteBooking(id);
+  await cancelMeetForBooking(id).catch((e) => console.error("cancelMeetForBooking failed:", e));
   return NextResponse.json({ ok: true });
 }
