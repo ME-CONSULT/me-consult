@@ -82,7 +82,7 @@ export default async function PortalDashboardPage() {
                   </span>
                 </div>
 
-                {b.meeting_url && b.status === "active" && (
+                {b.meeting_url && (b.status === "active" || b.status === "pending") && (
                   <a
                     href={b.meeting_url}
                     target="_blank"

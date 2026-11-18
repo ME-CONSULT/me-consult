@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Booking, BookingStatus, PaymentStatus } from "@/lib/bookings";
 import { TIER_LABELS, type Lawyer } from "@/lib/lawyers";
 import { formatNaira } from "@/lib/pricing";
+import { MeetingLinkForm } from "@/components/admin/MeetingLinkForm";
 import { GENERIC_INTAKE_QUESTIONS, SERVICE_INTAKE_QUESTIONS } from "@/lib/intakeQuestions";
 
 const STATUS_TRANSITIONS: Record<BookingStatus, { to: BookingStatus; label: string }[]> = {
@@ -50,7 +51,6 @@ export default function BookingDetailClient({
   const [booking, setBooking] = useState(initialBooking);
   const [notes, setNotes] = useState(booking.notes ?? "");
   const [title, setTitle] = useState(booking.title ?? "");
-  const [meetingUrl, setMeetingUrl] = useState(booking.meeting_url ?? "");
   const [scheduledAt, setScheduledAt] = useState(toLocalInputValue(booking.scheduled_at));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -227,20 +227,8 @@ export default function BookingDetailClient({
           </div>
 
           <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
-            <label className="block text-sm font-medium text-[#222753]">Meeting link</label>
-            <input
-              value={meetingUrl}
-              onChange={(e) => setMeetingUrl(e.target.value)}
-              placeholder="https://..."
-              className="mt-1.5 w-full rounded-lg border border-[#222753]/15 px-3 py-2 text-sm text-[#222753] outline-none focus:border-[#222753]/40"
-            />
-            <button
-              onClick={() => patch({ meeting_url: meetingUrl.trim() || null })}
-              disabled={saving}
-              className="mt-3 rounded-lg border border-[#222753]/15 px-3 py-1.5 text-sm text-[#222753]/70 hover:bg-[#222753]/5 disabled:opacity-50"
-            >
-              Save meeting link
-            </button>
+            <label className="mb-1.5 block text-sm font-medium text-[#222753]">Meeting link</label>
+            <MeetingLinkForm bookingId={booking.id} initialUrl={booking.meeting_url} />
           </div>
 
           <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">

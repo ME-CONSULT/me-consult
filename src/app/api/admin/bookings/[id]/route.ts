@@ -51,6 +51,10 @@ export async function PATCH(
     typeof body.meeting_url === "string" &&
     body.meeting_url.trim() &&
     body.meeting_url.trim() !== existing.meeting_url;
+  // "Resend to client" re-emails an unchanged link.
+  const sendMeetingEmail =
+    meetingUrlNewlySet ||
+    (body.resend_meeting_email === true && typeof body.meeting_url === "string" && body.meeting_url.trim());
 
   if (body.status !== undefined) {
     if (!VALID_STATUSES.includes(body.status)) {
@@ -86,7 +90,7 @@ export async function PATCH(
       );
     }
 
-    if (meetingUrlNewlySet) {
+    if (sendMeetingEmail) {
       sendMeetingLinkEmail(booking).catch((e) => console.error("sendMeetingLinkEmail failed:", e));
     }
 

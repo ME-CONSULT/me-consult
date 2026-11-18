@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getClient } from "@/lib/clients";
 import { formatNaira } from "@/lib/pricing";
+import { MeetingLinkForm } from "@/components/admin/MeetingLinkForm";
 
 export default async function AdminClientDetailPage({
   params,
@@ -15,6 +16,8 @@ export default async function AdminClientDetailPage({
   if (!client) notFound();
 
   const { summary, bookings } = client;
+  // Bookings that still need a call: anything not finished or cancelled.
+  const upcoming = bookings.filter((b) => b.status === "active" || b.status === "pending");
 
   return (
     <div className="space-y-6">
@@ -65,6 +68,37 @@ export default async function AdminClientDetailPage({
           </div>
         </div>
       </div>
+
+      {upcoming.length > 0 && (
+        <div className="rounded-xl border border-[#222753]/10 bg-white p-4 sm:p-6">
+          <h2 className="text-sm font-semibold text-[#222753]">Meeting links</h2>
+          <p className="mt-0.5 text-xs text-[#222753]/50">
+            Add the call link for each upcoming session. The client gets it by email and in their account.
+          </p>
+          <div className="mt-4 space-y-4">
+            {upcoming.map((b) => (
+              <div key={b.id} className="border-t border-[#222753]/5 pt-4 first:border-0 first:pt-0">
+                <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
+                  <Link href={`/admin/bookings/${b.id}`} className="font-medium text-[#222753] hover:underline">
+                    {b.scheduled_at
+                      ? new Date(b.scheduled_at).toLocaleString("en-NG", {
+                          timeZone: "Africa/Lagos",
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })
+                      : "Time to be arranged"}
+                    {b.duration_minutes ? ` · ${b.duration_minutes} min` : ""}
+                  </Link>
+                  <span className="text-xs text-[#222753]/50">
+                    {b.payment_status === "paid" ? "Paid" : "Unpaid"} · {b.status}
+                  </span>
+                </div>
+                <MeetingLinkForm bookingId={b.id} initialUrl={b.meeting_url} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="overflow-hidden rounded-xl border border-[#222753]/10 bg-white">
         <table className="w-full text-sm">
